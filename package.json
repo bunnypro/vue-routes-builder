@@ -1,5 +1,5 @@
 {
-  "name": "@bunnypro/vue-routes-builder",
+  "name": "vue-routes-builder",
   "version": "0.1.0",
   "description": "A Vue Routes Builder",
   "main": "dist/index.js",
