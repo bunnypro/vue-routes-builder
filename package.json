@@ -1,0 +1,39 @@
+{
+  "name": "@bunnypro/vue-routes-builder",
+  "version": "0.1.0",
+  "description": "A Vue Routes Builder",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "./node_modules/.bin/rimraf ./dist && yarn test && ./node_modules/.bin/rollup -c",
+    "test": "./node_modules/.bin/jest"
+  },
+  "devDependencies": {
+    "@types/jest": "^22.2.3",
+    "@types/node": "^10.0.8",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-env": "^1.7.0",
+    "jest": "^22.4.3",
+    "rimraf": "^2.6.2",
+    "rollup": "^0.58.2",
+    "rollup-plugin-babel": "^3.0.4",
+    "rollup-plugin-typescript2": "^0.14.0",
+    "ts-jest": "^22.4.6",
+    "typescript": "^2.8.3",
+    "vue-router": "^3.0.1"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  }
+}
