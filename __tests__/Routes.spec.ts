@@ -28,7 +28,7 @@ describe('Routes', () => {
         routes.addNamed('home',
             {
                 home: Home,
-                abour: About,
+                about: About,
             },
             {
                 props: true,
@@ -40,7 +40,7 @@ describe('Routes', () => {
                 path: '/home',
                 components: {
                     home: Home,
-                    abour: About,
+                    about: About,
                 },
                 props: true,
             },
