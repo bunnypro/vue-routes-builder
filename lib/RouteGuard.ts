@@ -1,5 +1,7 @@
-import { Route } from "vue-router";
+import { Route, Location } from "vue-router";
+
+export type RouteGuardReturn = string | boolean | void | Location | ((vm: any) => any);
 
 export abstract class RouteGuard {
-    abstract handle(to: Route, from: Route): boolean | string;
+    abstract handle(to: Route, from: Route): RouteGuardReturn;
 }

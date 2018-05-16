@@ -1,4 +1,4 @@
-export function tap(value: any, fn: (value: any) => void) {
-    fn(value);
+export function tap<T>(value: T, ...fns: ((value: T) => void)[]): T {
+    fns.forEach(fn => fn(value));
     return value;
 }

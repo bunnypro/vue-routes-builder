@@ -14,82 +14,60 @@ export interface RouteBuilderConfig {
 }
 
 export abstract class RouteBuilder {
-    protected path: string;
-    protected config: RouteBuilderConfig;
-    protected childs: RouteCollection;
+    protected config: RouteConfig;
+    protected childrenRoutes: RouteCollection;
     protected guards: RouteGuard[] = [];
 
-    constructor(path: string, config: RouteBuilderConfig = {}) {
-        this.childs = new RouteCollection(path);
-        this.path = path;
+    protected constructor(config: RouteConfig) {
         this.config = config;
+        this.childrenRoutes = new RouteCollection({ children: true });
     }
 
-    guard(guard: RouteGuard): RouteBuilder {
-        this.guards.push(guard);
-
+    guard(...guards: RouteGuard[]): RouteBuilder {
+        this.guards.push(...guards);
         return this;
     }
 
     children(fn: (routes: RouteCollection) => void): void {
-        fn(this.childs);
+        fn(this.childrenRoutes);
     }
 
     build(): RouteConfig {
-        let route: RouteConfig = {
-            ...this.config,
-            path: this.path,
-        };
+        let config = { ...this.config };
 
-        if (this.childs.count > 0) {
-            route.children = this.childs.build();
+        if (this.childrenRoutes.count > 0) {
+            config.children = this.childrenRoutes.build();
         }
 
         if (this.guards.length > 0) {
-            route.beforeEnter = (to, from, next) => {
+            config.beforeEnter = (to, from, next) => {
                 this.guards.every(guard => {
                     const nextStep = guard.handle(to, from);
 
-                    if (nextStep !== true) {
-                        next(nextStep);
-                        return false;
+                    if (nextStep === true || nextStep === null || nextStep === undefined) {
+                        return true;
                     }
+
+                    next(nextStep);
+                    return false;
                 });
+
+                next();
             };
         }
 
-        return route;
+        return config;
     }
 }
 
 export class SingleViewRoute extends RouteBuilder {
-    view: Component;
-
     constructor(path: string, view: Component, config: RouteBuilderConfig = {}) {
-        super(path, config);
-        this.view = view;
-    }
-
-    build(): RouteConfig {
-        return {
-            ...super.build(),
-            component: this.view,
-        };
+        super({ ...config, path, component: view });
     }
 }
 
 export class NamedViewRoute extends RouteBuilder {
-    views: Dictionary<Component>;
-
     constructor(path: string, views: Dictionary<Component>, config: RouteBuilderConfig = {}) {
-        super(path, config);
-        this.views = views;
-    }
-
-    build(): RouteConfig {
-        return {
-            ...super.build(),
-            components: this.views,
-        };
+        super({ ...config, path, components: views });
     }
 }
