@@ -1,3 +1,3 @@
-import { RouteCollection as Routes } from "./RouteCollection";
+import { RouteCollection } from "./RouteCollection";
 
-export default Routes;
+export default RouteCollection;
