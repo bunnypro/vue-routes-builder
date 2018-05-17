@@ -4,3 +4,4 @@ build/
 .idea/
 .vscode/
 lib/
+__test__/
