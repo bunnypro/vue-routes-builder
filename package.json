@@ -17,6 +17,7 @@
         "rimraf": "^2.6.2",
         "rollup": "^0.58.2",
         "rollup-plugin-babel": "^3.0.4",
+        "rollup-plugin-license": "^0.6.0",
         "rollup-plugin-typescript2": "^0.14.0",
         "ts-jest": "^22.4.6",
         "typescript": "^2.8.3",
