@@ -40,7 +40,7 @@ export default routes;
 ```ts
 // file ./index.ts
 import Vue from 'vue';
-import VuRouter from 'vue-router';
+import VueRouter from 'vue-router';
 import routes from './routes';
 
 Vue.use(VueRouter);
