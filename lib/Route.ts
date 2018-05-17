@@ -1,5 +1,12 @@
-import { RouteConfig, Component, Dictionary, RedirectOption, RoutePropsFunction, PathToRegexpOptions } from "vue-router/types/router";
-import { tap } from './util';
+import {
+    RouteConfig,
+    Component,
+    Dictionary,
+    RedirectOption,
+    RoutePropsFunction,
+    PathToRegexpOptions,
+} from "vue-router/types/router";
+import { tap } from "./util";
 import { RouteCollection } from "./RouteCollection";
 
 export interface RouteBuilderConfig {
@@ -16,21 +23,29 @@ export class Route {
     private readonly config: RouteConfig;
     private childrenRoutes: RouteCollection;
 
-    constructor(path: string, view?: Component, views?: Dictionary<Component>, config: RouteBuilderConfig = {}) {
+    constructor(
+        path: string,
+        view?: Component,
+        views?: Dictionary<Component>,
+        config: RouteBuilderConfig = {},
+    ) {
         this.config = {
             ...config,
             path: this.resolvePath(path),
-            components: this.resolveComponents(view, views)
+            components: this.resolveComponents(view, views),
         };
     }
 
     private resolvePath(path: string): string {
-        let rPath = path.replace(/\/+/g, '/');
+        const rPath = path.replace(/\/+/g, "/");
 
-        return rPath === '/' ? rPath : rPath.replace(/\/+$/g, '');
+        return rPath === "/" ? rPath : rPath.replace(/\/+$/g, "");
     }
 
-    private resolveComponents(view?: Component, views?: Dictionary<Component>): Dictionary<Component> {
+    private resolveComponents(
+        view?: Component,
+        views?: Dictionary<Component>,
+    ): Dictionary<Component> {
         const components = { ...(views || {}) };
 
         if (view) {

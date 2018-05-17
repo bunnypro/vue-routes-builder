@@ -15,9 +15,9 @@ export default {
                 [
                     'env',
                     {
-                        "modules": false
-                    }
-                ]
+                        modules: false,
+                    },
+                ],
             ],
             plugins: [
                 'external-helpers',
