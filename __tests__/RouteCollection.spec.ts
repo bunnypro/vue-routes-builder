@@ -1,4 +1,6 @@
 import { RouteCollection, RouteCollectionConfig } from "../lib/RouteCollection";
+import { RouteGuard, RouteGuardHanldeResult } from "../lib/Route";
+import { Route as VueRoute } from "vue-router/types/router";
 
 describe("RouteCollection", () => {
     let routes: RouteCollection;
@@ -301,5 +303,32 @@ describe("RouteCollection", () => {
                 components: {},
             },
         ]);
+    });
+
+    test("can add guard to grouped routes", () => {
+        initRoutes();
+
+        class RedirectIfNotAuthenticatedGuard extends RouteGuard {
+            handle(from: VueRoute, to: VueRoute): RouteGuardHanldeResult {
+                return "/";
+            }
+        }
+
+        routes.group(
+            {
+                prefix: "dashboard",
+                guards: [new RedirectIfNotAuthenticatedGuard()],
+            },
+            r => {
+                r.add("home");
+            },
+        );
+
+        const route = routes.build()[0];
+
+        expect(route.beforeEnter).toBeInstanceOf(Function);
+        route.beforeEnter(null, null, result => {
+            expect(result).toEqual("/");
+        });
     });
 });

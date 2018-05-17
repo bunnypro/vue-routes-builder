@@ -1,5 +1,5 @@
 import { Component, Dictionary, RouteConfig } from "vue-router/types/router";
-import { RouteBuilderConfig, Route } from "./Route";
+import { RouteBuilderConfig, Route, RouteGuard } from "./Route";
 import { tap } from "./util";
 
 export interface RouteCollectionConfig {
@@ -9,6 +9,7 @@ export interface RouteCollectionConfig {
 
 export interface RouteGroupConfig {
     prefix: string;
+    guards?: RouteGuard[];
 }
 
 export class RouteCollection {
@@ -38,15 +39,18 @@ export class RouteCollection {
         );
     }
 
-    group(config: RouteGroupConfig, fn: (routes: RouteCollection) => void) {
+    group(
+        { prefix, guards = [] }: RouteGroupConfig,
+        fn: (routes: RouteCollection) => void,
+    ) {
         this.routes.push(
             ...tap(
                 new RouteCollection({
-                    base: this.resolveRoutePath(config.prefix),
+                    base: this.resolveRoutePath(prefix),
                     children: this.children,
                 }),
                 fn,
-            ).routes,
+            ).routes.map(route => tap(route, r => r.guard(...guards))),
         );
     }
 
