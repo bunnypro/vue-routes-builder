@@ -173,4 +173,18 @@ describe("Route", () => {
       expect(result).toEqual("/");
     });
   });
+
+  test("use user specified beforEnter if exists", () => {
+    const route = new Route("/home", null, null, {
+      beforeEnter: function(to, from, next) {
+        next("/about");
+      },
+    });
+
+    route.guard(new AllowedGuard(), new RedirectedGuard());
+
+    route.build().beforeEnter(null, null, result => {
+      expect(result).toEqual("/about");
+    });
+  });
 });

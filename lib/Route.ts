@@ -74,22 +74,24 @@ export class Route {
       }
 
       if (this.guards.length > 0) {
-        config.beforeEnter = (to, from, next) => {
-          const guardsPassed = this.guards.every(guard => {
-            const nextStep = guard.handle(to, from);
+        config.beforeEnter =
+          config.beforeEnter ||
+          ((to, from, next) => {
+            const guardsPassed = this.guards.every(guard => {
+              const nextStep = guard.handle(to, from);
 
-            if (nextStep === true || nextStep === undefined || nextStep === null) {
-              return true;
+              if (nextStep === true || nextStep === undefined || nextStep === null) {
+                return true;
+              }
+
+              next(nextStep);
+              return false;
+            });
+
+            if (guardsPassed) {
+              next();
             }
-
-            next(nextStep);
-            return false;
           });
-
-          if (guardsPassed) {
-            next();
-          }
-        };
       }
     });
   }
