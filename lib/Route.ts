@@ -85,7 +85,7 @@ export class Route {
 
             if (this.guards.length > 0) {
                 config.beforeEnter = (to, from, next) => {
-                    const guardPassed = this.guards.every(guard => {
+                    const guardsPassed = this.guards.every(guard => {
                         const nextStep = guard.handle(to, from);
 
                         if (
@@ -100,7 +100,7 @@ export class Route {
                         return false;
                     });
 
-                    if (guardPassed) {
+                    if (guardsPassed) {
                         next();
                     }
                 };
