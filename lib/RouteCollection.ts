@@ -9,7 +9,7 @@ export interface RouteCollectionConfig {
 export class RouteCollection {
     private readonly base: string;
     private readonly children: boolean;
-    private routes: Route[] = [];
+    private readonly routes: Route[] = [];
 
     constructor(
         { base = "/", children = false }: RouteCollectionConfig = {
