@@ -253,4 +253,53 @@ describe("RouteCollection", () => {
         ]);
     });
 
+    test("can create grouped routes", () => {
+        initRoutes();
+
+        routes.group({ prefix: "dashboard" }, r => {
+            r.add("home");
+            r.add("about");
+        });
+
+        expect(routes.build()).toEqual([
+            {
+                path: "/dashboard/home",
+                components: {},
+            },
+            {
+                path: "/dashboard/about",
+                components: {},
+            },
+        ]);
+    });
+
+    test("can create grouped routes with children", () => {
+        initRoutes();
+
+        routes.group({ prefix: "dashboard" }, r => {
+            r.add("home").children(r1 => {
+                r1.group({ prefix: "/about" }, r2 => {
+                    r2.add("//company/");
+                });
+            });
+            r.add("about");
+        });
+
+        expect(routes.build()).toEqual([
+            {
+                path: "/dashboard/home",
+                components: {},
+                children: [
+                    {
+                        path: "about/company",
+                        components: {},
+                    },
+                ],
+            },
+            {
+                path: "/dashboard/about",
+                components: {},
+            },
+        ]);
+    });
 });

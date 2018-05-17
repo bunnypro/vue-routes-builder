@@ -7,6 +7,10 @@ export interface RouteCollectionConfig {
     children?: boolean;
 }
 
+export interface RouteGroupConfig {
+    prefix: string;
+}
+
 export class RouteCollection {
     private readonly base: string;
     private readonly children: boolean;
@@ -34,6 +38,15 @@ export class RouteCollection {
         );
     }
 
+    group(config: RouteGroupConfig, fn: (routes: RouteCollection) => void) {
+        this.routes.push(
+            ...tap(
+                new RouteCollection({
+                    base: this.resolveRoutePath(config.prefix),
+                    children: this.children,
+                }),
+                fn,
+            ).routes,
         );
     }
 
