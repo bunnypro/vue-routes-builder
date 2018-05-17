@@ -1,26 +1,23 @@
 {
-    "compilerOptions": {
-        "module": "es6",
-        "target": "es6",
-        "moduleResolution": "node",
-        "removeComments": true,
-        "isolatedModules": false,
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
-        "declaration": false,
-        "noImplicitAny": false,
-        "noImplicitUseStrict": false,
-        "noLib": false,
-        "preserveConstEnums": true,
-        "suppressImplicitAnyIndexErrors": true,
-        "pretty": true
-    },
-    "exclude": [
-        "node_modules/*"
-    ],
-    "files": [
-        "lib/index.ts"
-    ],
-    "compileOnSave": false,
-    "buildOnSave": false
+  "compilerOptions": {
+    "module": "es6",
+    "target": "es6",
+    "moduleResolution": "node",
+    "removeComments": true,
+    "isolatedModules": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "declaration": true,
+    "declarationDir": "./types/",
+    "noImplicitAny": false,
+    "noImplicitUseStrict": false,
+    "noLib": false,
+    "preserveConstEnums": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "pretty": true
+  },
+  "exclude": ["node_modules/*"],
+  "files": ["lib/index.ts"],
+  "compileOnSave": false,
+  "buildOnSave": false
 }

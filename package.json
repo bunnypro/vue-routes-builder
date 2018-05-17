@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "build": "yarn cleanup && yarn test && yarn compile",
-    "cleanup": "./node_modules/.bin/rimraf ./dist",
+    "cleanup": "./node_modules/.bin/rimraf ./dist ./types",
     "test": "./node_modules/.bin/jest",
     "compile": "./node_modules/.bin/rollup -c"
   },
@@ -35,13 +35,6 @@
       "^.+\\.tsx?$": "ts-jest"
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"]
   }
 }
