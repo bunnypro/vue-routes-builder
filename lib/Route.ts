@@ -5,9 +5,12 @@ import {
     RedirectOption,
     RoutePropsFunction,
     PathToRegexpOptions,
+    Route as VueRoute,
+    RawLocation,
 } from "vue-router/types/router";
 import { tap } from "./util";
 import { RouteCollection } from "./RouteCollection";
+import Vue from "vue";
 
 export interface RouteBuilderConfig {
     name?: string;
@@ -19,9 +22,20 @@ export interface RouteBuilderConfig {
     pathToRegexpOptions?: PathToRegexpOptions;
 }
 
+export type RouteGuardHanldeResult =
+    | RawLocation
+    | boolean
+    | ((vm: Vue) => any)
+    | void;
+
+export abstract class RouteGuard {
+    abstract handle(from: VueRoute, to: VueRoute): RouteGuardHanldeResult;
+}
+
 export class Route {
     private readonly config: RouteConfig;
     private childrenRoutes: RouteCollection;
+    private readonly guards: RouteGuard[] = [];
 
     constructor(
         path: string,
@@ -55,6 +69,10 @@ export class Route {
         return components;
     }
 
+    guard(...guards: RouteGuard[]): void {
+        this.guards.push(...guards);
+    }
+
     children(fn: (routes: RouteCollection) => void): void {
         this.childrenRoutes = tap(new RouteCollection({ children: true }), fn);
     }
@@ -63,6 +81,29 @@ export class Route {
         return tap({ ...this.config }, config => {
             if (this.childrenRoutes && this.childrenRoutes.count) {
                 config.children = this.childrenRoutes.build();
+            }
+
+            if (this.guards.length > 0) {
+                config.beforeEnter = (to, from, next) => {
+                    const guardPassed = this.guards.every(guard => {
+                        const nextStep = guard.handle(to, from);
+
+                        if (
+                            nextStep === true ||
+                            nextStep === undefined ||
+                            nextStep === null
+                        ) {
+                            return true;
+                        }
+
+                        next(nextStep);
+                        return false;
+                    });
+
+                    if (guardPassed) {
+                        next();
+                    }
+                };
             }
         });
     }

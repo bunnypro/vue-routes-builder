@@ -1,4 +1,5 @@
-import { Route } from "../lib/Route";
+import { Route, RouteGuard, RouteGuardHanldeResult } from "../lib/Route";
+import { Route as VueRoute } from "vue-router/types/router";
 
 describe("Route", () => {
     const Home = { template: "<div>Home</div>" };
@@ -142,6 +143,34 @@ describe("Route", () => {
                     },
                 },
             ],
+        });
+    });
+
+    class AllowedGuard extends RouteGuard {
+        handle(from: VueRoute, to: VueRoute): RouteGuardHanldeResult {
+            return true;
+        }
+    }
+
+    class RedirectedGuard extends RouteGuard {
+        handle(from: VueRoute, to: VueRoute): RouteGuardHanldeResult {
+            return "/";
+        }
+    }
+
+    test("can add route guards", () => {
+        const route = new Route("/home");
+
+        route.guard(new AllowedGuard());
+
+        route.build().beforeEnter(null, null, result => {
+            expect([undefined, null]).toContain(result);
+        });
+
+        route.guard(new RedirectedGuard());
+
+        route.build().beforeEnter(null, null, result => {
+            expect(result).toEqual("/");
         });
     });
 });
