@@ -5,3 +5,6 @@ build/
 .vscode/
 lib/
 __test__/
+rollup.config.js
+tsconfig.json
+yarn.lock
