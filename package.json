@@ -1,6 +1,6 @@
 {
   "name": "vue-routes-builder",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A Vue Routes Builder",
   "main": "dist/index.js",
   "license": "MIT",
@@ -35,6 +35,13 @@
       "^.+\\.tsx?$": "ts-jest"
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"]
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   }
 }
