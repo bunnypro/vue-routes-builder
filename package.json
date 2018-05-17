@@ -15,11 +15,7 @@
     "url": "https://github.com/bunnypro/vue-routes-builder"
   },
   "typings": "types/index.d.ts",
-  "files": [
-    "lib/*.ts",
-    "dist/*.js",
-    "types/*.d.ts"
-  ],
+  "files": ["lib/*.ts", "dist/*.js", "types/*.d.ts"],
   "devDependencies": {
     "@types/jest": "^22.2.3",
     "@types/node": "^10.0.8",
@@ -41,13 +37,6 @@
       "^.+\\.tsx?$": "ts-jest"
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"]
   }
 }
