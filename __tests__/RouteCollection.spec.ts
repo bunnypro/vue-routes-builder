@@ -218,4 +218,39 @@ describe("RouteCollection", () => {
             },
         ]);
     });
+
+    test("can create children from created route", () => {
+        initRoutes();
+
+        routes.add("dashboard").children(r => {
+            r.add("home").children(r1 => {
+                r1.add("about");
+            });
+            r.add("about");
+        });
+
+        expect(routes.build()).toEqual([
+            {
+                path: "/dashboard",
+                components: {},
+                children: [
+                    {
+                        path: "home",
+                        components: {},
+                        children: [
+                            {
+                                path: "about",
+                                components: {},
+                            },
+                        ],
+                    },
+                    {
+                        path: "about",
+                        components: {},
+                    },
+                ],
+            },
+        ]);
+    });
+
 });

@@ -1,5 +1,6 @@
 import { Component, Dictionary, RouteConfig } from "vue-router/types/router";
 import { RouteBuilderConfig, Route } from "./Route";
+import { tap } from "./util";
 
 export interface RouteCollectionConfig {
     base?: string;
@@ -26,9 +27,13 @@ export class RouteCollection {
         view?: Component,
         views?: Dictionary<Component>,
         config: RouteBuilderConfig = {},
-    ) {
-        this.routes.push(
+    ): Route {
+        return tap(
             new Route(this.resolveRoutePath(path), view, views, config),
+            Array.prototype.push.bind(this.routes),
+        );
+    }
+
         );
     }
 
