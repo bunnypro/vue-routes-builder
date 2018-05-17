@@ -1,81 +1,46 @@
-import { Component, RouteConfig, Dictionary } from "vue-router/types/router";
-import { RouteBuilderConfig, RouteBuilder, SingleViewRoute, NamedViewRoute } from "./RouteBuilder";
-import { tap } from './util';
-import { RouteGuard } from "./RouteGuard";
+import { Component, Dictionary, RouteConfig } from "vue-router/types/router";
+import { RouteBuilderConfig, Route } from "./Route";
 
 export interface RouteCollectionConfig {
-    root?: string;
+    base?: string;
     children?: boolean;
-}
+};
 
 export class RouteCollection {
-    private readonly root: string;
-    private routes: RouteBuilder[] = [];
-    private guards: RouteGuard[] = [];
+    private readonly base: string;
     private readonly children: boolean;
+    private routes: Route[] = [];
 
-    constructor({ root = '/', children = false }: RouteCollectionConfig = { root: '/', children: false }) {
-        this.root = this.resolveRootPath(root);
+    constructor({ base = '/', children = false }: RouteCollectionConfig = { base: '/', children: false }) {
+        this.base = this.resolveBasePath(base);
         this.children = children;
     }
 
-    guard(...guards: RouteGuard[]): void {
-        this.guards.concat(...tap(guards, guards => {
-            this.routes.forEach(route => {
-                route.guard(...guards);
-            });
-        }));
+    add(path: string, view?: Component, views?: Dictionary<Component>, config: RouteBuilderConfig = {}) {
+        this.routes.push(new Route(this.resolveRoutePath(path), view, views, config));
     }
 
-    group(prefix: string, fn: (routes: RouteCollection) => void): void {
-        tap(new RouteCollection({ root: this.resolveFromRootPath(prefix), children: this.children }), fn, router => {
-            this.routes.push(...router.routes);
-        });
+    private resolveBasePath(path: string): string {
+        let rPath = `/${path}`.replace(/\/+/g, '/');
+
+        return rPath === '/' ? rPath : rPath.replace(/\/+$/g, '');
     }
 
-    add(path: string, component: Component, config: RouteBuilderConfig = {}): RouteBuilder {
-        return tap(
-            new SingleViewRoute(this.resolveFromRootPath(path), component, config),
-            this.routes.push.bind(this.routes)
-        ).guard(...this.guards);
-    }
+    private resolveRoutePath(path: string): string {
+        let rPath = `${this.base}/${path}`.replace(/\/+/g, '/');
 
-    addNamed(path: string, components: Dictionary<Component>, config: RouteBuilderConfig = {}): RouteBuilder {
-        return tap(
-            new NamedViewRoute(this.resolveFromRootPath(path), components, config),
-            this.routes.push.bind(this.routes)
-        ).guard(...this.guards);
-    }
+        if (rPath === '/') {
+            return rPath;
+        }
 
-    build(): RouteConfig[] {
-        return this.routes.map(route => route.build());
+        return this.children ? rPath.replace(/^\/+/g, '') : rPath;
     }
 
     get count(): number {
         return this.routes.length;
     }
 
-    private resolveFromRootPath(path: string): string {
-        let fPath = this.clearPath(`/${path}`);
-
-        if (this.children) {
-            return [fPath, this.root].every(p => p === '/') ? '/' : `${this.root}${fPath}`.replace(/^\/+|\/+$/g, '');
-        }
-
-        if (fPath === '/') {
-            return this.root;
-        }
-
-        return `${this.root}${fPath}`.replace(/\/+/g, '/');
-    }
-
-    private resolveRootPath(path: string): string {
-        return this.clearPath(`/${path}`);
-    }
-
-    private clearPath(path: string): string {
-        let fPath = path.replace(/\/+/g, '/');
-
-        return fPath === '/' ? fPath : fPath.replace(/\/+$/g, '');
+    build(): RouteConfig[] {
+        return this.routes.map(route => route.build());
     }
 }
