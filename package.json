@@ -14,6 +14,8 @@
     "type": "git",
     "url": "https://github.com/bunnypro/vue-routes-builder"
   },
+  "typings": "types/index.d.ts",
+  "files": ["lib/*.ts", "dist/*.js", "types/*.d.ts"],
   "devDependencies": {
     "@types/jest": "^22.2.3",
     "@types/node": "^10.0.8",
