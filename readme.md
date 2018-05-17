@@ -19,19 +19,17 @@ const routes = new Routes();
 routes.add("home", () => import("./view/Home.vue"));
 
 // add grouped routes
-routes.group({ prefix: "dashboard" }, route => {
+routes.group({ prefix: "dashboard" }, group => {
   // add a route with default and named view
-  route.add("/", () => import("./view/Dashboard.vue"), {
+  group.add("/", () => import("./view/Dashboard.vue"), {
     menu: () => import("./view/dashboard/Menu.vue"),
   });
 
   // add a route with children routes
-  route
-    .add("profile", () => import("./view/dashboard/Profile.vue"))
-    .children(r => {
-      r.add("/", () => import("./view/dashboard/profile/General.vue"));
-      r.add("setting", () => import("./view/dashboard/profile/Setting.vue"));
-    });
+  group.add("profile", () => import("./view/dashboard/Profile.vue")).children(children => {
+    children.add("/", () => import("./view/dashboard/profile/General.vue"));
+    children.add("setting", () => import("./view/dashboard/profile/Setting.vue"));
+  });
 });
 
 export default routes;
