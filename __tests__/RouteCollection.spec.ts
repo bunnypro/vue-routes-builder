@@ -325,11 +325,10 @@ describe("RouteCollection", () => {
       },
     );
 
-    const route = routes.build()[0];
-
-    expect(route.beforeEnter).toBeInstanceOf(Function);
-    route.beforeEnter(null, null, result => {
-      expect(result).toEqual("/");
+    tap(routes.build(), buildedRoutes => {
+      buildedRoutes[0].beforeEnter(null, null, result => {
+        expect(result).toEqual("/");
+      });
     });
   });
 

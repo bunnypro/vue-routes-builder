@@ -60,60 +60,60 @@ describe("Route", () => {
   });
 
   test("should resolve correct path", () => {
-    const route = new Route("/");
-
-    expect(route.build()).toEqual({
-      path: "/",
-      components: {},
+    tap(new Route("/"), route => {
+      expect(route.build()).toEqual({
+        path: "/",
+        components: {},
+      });
     });
 
-    const route1 = new Route("//");
-
-    expect(route1.build()).toEqual({
-      path: "/",
-      components: {},
+    tap(new Route("//"), route => {
+      expect(route.build()).toEqual({
+        path: "/",
+        components: {},
+      });
     });
 
-    const route2 = new Route("/home");
-
-    expect(route2.build()).toEqual({
-      path: "/home",
-      components: {},
+    tap(new Route("/home"), route => {
+      expect(route.build()).toEqual({
+        path: "/home",
+        components: {},
+      });
     });
 
-    const route3 = new Route("home");
-
-    expect(route3.build()).toEqual({
-      path: "home",
-      components: {},
+    tap(new Route("home"), route => {
+      expect(route.build()).toEqual({
+        path: "home",
+        components: {},
+      });
     });
 
-    const route4 = new Route("home/");
-
-    expect(route4.build()).toEqual({
-      path: "home",
-      components: {},
+    tap(new Route("home/"), route => {
+      expect(route.build()).toEqual({
+        path: "home",
+        components: {},
+      });
     });
 
-    const route5 = new Route("/home/");
-
-    expect(route5.build()).toEqual({
-      path: "/home",
-      components: {},
+    tap(new Route("/home/"), route => {
+      expect(route.build()).toEqual({
+        path: "/home",
+        components: {},
+      });
     });
 
-    const route6 = new Route("//home//");
-
-    expect(route6.build()).toEqual({
-      path: "/home",
-      components: {},
+    tap(new Route("//home//"), route => {
+      expect(route.build()).toEqual({
+        path: "/home",
+        components: {},
+      });
     });
 
-    const route7 = new Route("//home//about//");
-
-    expect(route7.build()).toEqual({
-      path: "/home/about",
-      components: {},
+    tap(new Route("//home//about//"), route => {
+      expect(route.build()).toEqual({
+        path: "/home/about",
+        components: {},
+      });
     });
   });
 
