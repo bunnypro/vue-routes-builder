@@ -1,5 +1,8 @@
 # Vue Routes Builder
 
+[![Build Status](https://travis-ci.org/bunnypro/vue-routes-builder.svg?branch=master)](https://travis-ci.org/bunnypro/vue-routes-builder)
+[![License](https://img.shields.io/:license-MIT-blue.svg)](https://github.com/bunnypro/vue-routes-builder/blob/master/license)
+
 This library allows you to build a vue-router routes with chaining.
 
 ### installing
