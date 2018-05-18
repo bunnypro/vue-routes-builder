@@ -4,7 +4,7 @@
 [![npm](https://img.shields.io/npm/v/vue-routes-builder.svg)](https://www.npmjs.com/package/vue-routes-builder)
 [![License](https://img.shields.io/:license-MIT-blue.svg)](https://github.com/bunnypro/vue-routes-builder/blob/master/license)
 
-This library allows you to build a vue-router routes with chaining.
+This library allows you to build a vue-router routes with method chaining.
 
 ### installing
 
