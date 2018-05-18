@@ -19,15 +19,7 @@ describe("Route", () => {
   });
 
   test("can be instantiated with named views", () => {
-    const route = new Route(
-      "/",
-      null,
-      {
-        home: Home,
-        about: About,
-      },
-      { props: true },
-    );
+    const route = new Route("/", null, { home: Home, about: About }, { props: true });
 
     expect(route.build()).toEqual({
       path: "/",
@@ -40,14 +32,7 @@ describe("Route", () => {
   });
 
   test("can be instantiated with default and named views", () => {
-    const route = new Route(
-      "/",
-      Home,
-      {
-        about: About,
-      },
-      { props: true },
-    );
+    const route = new Route("/", Home, { about: About }, { props: true });
 
     expect(route.build()).toEqual({
       path: "/",
