@@ -1,6 +1,7 @@
 import { RouteCollection, RouteCollectionConfig } from "../lib/RouteCollection";
 import { RouteGuard, RouteGuardHanldeResult } from "../lib/Route";
 import { Route as VueRoute } from "vue-router/types/router";
+import { tap } from "../lib/util";
 
 describe("RouteCollection", () => {
   let routes: RouteCollection;
@@ -305,14 +306,14 @@ describe("RouteCollection", () => {
     ]);
   });
 
+  class RedirectIfNotAuthenticatedGuard extends RouteGuard {
+    handle(from: VueRoute, to: VueRoute): RouteGuardHanldeResult {
+      return "/";
+    }
+  }
+
   test("can add guard to grouped routes", () => {
     initRoutes();
-
-    class RedirectIfNotAuthenticatedGuard extends RouteGuard {
-      handle(from: VueRoute, to: VueRoute): RouteGuardHanldeResult {
-        return "/";
-      }
-    }
 
     routes.group(
       {
@@ -329,6 +330,25 @@ describe("RouteCollection", () => {
     expect(route.beforeEnter).toBeInstanceOf(Function);
     route.beforeEnter(null, null, result => {
       expect(result).toEqual("/");
+    });
+  });
+
+  test("can add children chained after guards chained after add", () => {
+    initRoutes();
+
+    routes
+      .add("/home")
+      .guard(new RedirectIfNotAuthenticatedGuard())
+      .children(children => {
+        children.add("about");
+      });
+
+    tap(routes.build(), buildedRoutes => {
+      buildedRoutes[0].beforeEnter(null, null, result => {
+        expect(result).toEqual("/");
+      });
+
+      expect(buildedRoutes[0].children[0].beforeEnter).toBeUndefined();
     });
   });
 });

@@ -59,8 +59,10 @@ export class Route {
     return components;
   }
 
-  guard(...guards: RouteGuard[]): void {
+  guard(...guards: RouteGuard[]): Route {
     this.guards.push(...guards);
+
+    return this;
   }
 
   children(fn: (routes: RouteCollection) => void): void {

@@ -1,5 +1,6 @@
 import { Route, RouteGuard, RouteGuardHanldeResult } from "../lib/Route";
 import { Route as VueRoute } from "vue-router/types/router";
+import { tap } from "../lib/util";
 
 describe("Route", () => {
   const Home = { template: "<div>Home</div>" };
@@ -185,6 +186,22 @@ describe("Route", () => {
 
     route.build().beforeEnter(null, null, result => {
       expect(result).toEqual("/about");
+    });
+  });
+
+  test("can add children chained after guards", () => {
+    const route = new Route("/home");
+
+    route.guard(new RedirectedGuard()).children(children => {
+      children.add("about");
+    });
+
+    tap(route.build(), buidedRoute => {
+      buidedRoute.beforeEnter(null, null, result => {
+        expect(result).toEqual("/");
+      });
+
+      expect(buidedRoute.children[0].beforeEnter).toBeUndefined();
     });
   });
 });
