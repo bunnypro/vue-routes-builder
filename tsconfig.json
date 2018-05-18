@@ -8,7 +8,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "declaration": true,
-    "declarationDir": "./types/",
+    "declarationDir": "types",
     "noImplicitAny": false,
     "noImplicitUseStrict": false,
     "noLib": false,
