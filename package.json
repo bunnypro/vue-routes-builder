@@ -2,11 +2,12 @@
   "name": "vue-routes-builder",
   "version": "0.2.2",
   "description": "A Vue Routes Builder",
-  "main": "dist/index.js",
+  "main": "dist/routes.js",
+  "module": "dist/routes.esm.js",
   "license": "MIT",
   "scripts": {
-    "build": "yarn cleanup && yarn test && yarn compile",
-    "cleanup": "./node_modules/.bin/rimraf ./dist ./types",
+    "build": "yarn clean && yarn test && yarn compile",
+    "clean": "./node_modules/.bin/rimraf ./dist ./types",
     "test": "./node_modules/.bin/jest",
     "compile": "./node_modules/.bin/rollup -c"
   },

@@ -5,10 +5,16 @@ import license from "rollup-plugin-license";
 
 export default {
   input: "./lib/index.ts",
-  output: {
-    file: "./dist/index.js",
-    format: "cjs",
-  },
+  output: [
+    {
+      file: "./dist/routes.js",
+      format: "cjs",
+    },
+    {
+      file: "./dist/routes.esm.js",
+      format: "es",
+    },
+  ],
   plugins: [
     typescript({
       useTsconfigDeclarationDir: true,
