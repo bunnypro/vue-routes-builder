@@ -33,6 +33,7 @@ describe("Route", () => {
 
   test("can be instantiated with default and named views", () => {
     const route = new Route("/", Home, { about: About }, { props: true });
+    const route2 = new Route("/", null, { default: Home, about: About }, { props: true });
 
     expect(route.build()).toEqual({
       path: "/",
@@ -42,6 +43,8 @@ describe("Route", () => {
       },
       props: true,
     });
+
+    expect(route.build()).toEqual(route2.build());
   });
 
   test("should resolve correct path", () => {
