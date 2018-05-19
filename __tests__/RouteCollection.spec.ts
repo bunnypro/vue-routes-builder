@@ -4,17 +4,11 @@ import { Route as VueRoute } from "vue-router/types/router";
 import { tap } from "../lib/util";
 
 describe("RouteCollection", () => {
-  let routes: RouteCollection;
-
   const Home = { template: "<div>Home</div>" };
   const About = { template: "<div>About</div>" };
 
-  function initRoutes(config?: RouteCollectionConfig) {
-    routes = new RouteCollection(config);
-  }
-
   test("can add routes", () => {
-    initRoutes();
+    const routes = new RouteCollection();
 
     routes.add("/", Home);
     routes.add("about", About);
@@ -32,7 +26,7 @@ describe("RouteCollection", () => {
   });
 
   test("can add named view route", () => {
-    initRoutes();
+    const routes = new RouteCollection();
 
     routes.add("/home", null, {
       home: Home,
@@ -51,7 +45,7 @@ describe("RouteCollection", () => {
   });
 
   test("can add default and named view route", () => {
-    initRoutes();
+    const routes = new RouteCollection();
 
     routes.add("/home", Home, {
       about: About,
@@ -69,161 +63,161 @@ describe("RouteCollection", () => {
   });
 
   test("shoule resolve correct path", () => {
-    initRoutes();
+    tap(new RouteCollection(), routes => {
+      routes.add("/");
+      routes.add("/home");
+      routes.add("home");
+      routes.add("home/");
+      routes.add("/home/");
+      routes.add("//home//");
+      routes.add("/home//about");
 
-    routes.add("/");
-    routes.add("/home");
-    routes.add("home");
-    routes.add("home/");
-    routes.add("/home/");
-    routes.add("//home//");
-    routes.add("/home//about");
+      expect(routes.build()).toEqual([
+        {
+          path: "/",
+          components: {},
+        },
+        {
+          path: "/home",
+          components: {},
+        },
+        {
+          path: "/home",
+          components: {},
+        },
+        {
+          path: "/home",
+          components: {},
+        },
+        {
+          path: "/home",
+          components: {},
+        },
+        {
+          path: "/home",
+          components: {},
+        },
+        {
+          path: "/home/about",
+          components: {},
+        },
+      ]);
+    });
 
-    expect(routes.build()).toEqual([
-      {
-        path: "/",
-        components: {},
-      },
-      {
-        path: "/home",
-        components: {},
-      },
-      {
-        path: "/home",
-        components: {},
-      },
-      {
-        path: "/home",
-        components: {},
-      },
-      {
-        path: "/home",
-        components: {},
-      },
-      {
-        path: "/home",
-        components: {},
-      },
-      {
-        path: "/home/about",
-        components: {},
-      },
-    ]);
+    tap(new RouteCollection({ base: "/dashboard" }), routes => {
+      routes.add("/");
+      routes.add("//about");
+      routes.add("home");
 
-    initRoutes({ base: "/dashboard" });
+      expect(routes.build()).toEqual([
+        {
+          path: "/dashboard",
+          components: {},
+        },
+        {
+          path: "/dashboard/about",
+          components: {},
+        },
+        {
+          path: "/dashboard/home",
+          components: {},
+        },
+      ]);
+    });
 
-    routes.add("/");
-    routes.add("//about");
-    routes.add("home");
+    tap(new RouteCollection({ base: "dashboard/" }), routes => {
+      routes.add("home");
+      routes.add("//about");
 
-    expect(routes.build()).toEqual([
-      {
-        path: "/dashboard",
-        components: {},
-      },
-      {
-        path: "/dashboard/about",
-        components: {},
-      },
-      {
-        path: "/dashboard/home",
-        components: {},
-      },
-    ]);
+      expect(routes.build()).toEqual([
+        {
+          path: "/dashboard/home",
+          components: {},
+        },
+        {
+          path: "/dashboard/about",
+          components: {},
+        },
+      ]);
+    });
 
-    initRoutes({ base: "dashboard/" });
+    tap(new RouteCollection({ base: "/dashboard/" }), routes => {
+      routes.add("home");
+      routes.add("//about");
 
-    routes.add("home");
-    routes.add("//about");
+      expect(routes.build()).toEqual([
+        {
+          path: "/dashboard/home",
+          components: {},
+        },
+        {
+          path: "/dashboard/about",
+          components: {},
+        },
+      ]);
+    });
 
-    expect(routes.build()).toEqual([
-      {
-        path: "/dashboard/home",
-        components: {},
-      },
-      {
-        path: "/dashboard/about",
-        components: {},
-      },
-    ]);
+    tap(new RouteCollection({ base: "//dashboard//" }), routes => {
+      routes.add("home");
+      routes.add("//about");
 
-    initRoutes({ base: "/dashboard/" });
+      expect(routes.build()).toEqual([
+        {
+          path: "/dashboard/home",
+          components: {},
+        },
+        {
+          path: "/dashboard/about",
+          components: {},
+        },
+      ]);
+    });
 
-    routes.add("home");
-    routes.add("//about");
+    tap(new RouteCollection({ children: true }), routes => {
+      routes.add("/");
+      routes.add("home");
+      routes.add("//about");
 
-    expect(routes.build()).toEqual([
-      {
-        path: "/dashboard/home",
-        components: {},
-      },
-      {
-        path: "/dashboard/about",
-        components: {},
-      },
-    ]);
+      expect(routes.build()).toEqual([
+        {
+          path: "/",
+          components: {},
+        },
+        {
+          path: "home",
+          components: {},
+        },
+        {
+          path: "about",
+          components: {},
+        },
+      ]);
+    });
 
-    initRoutes({ base: "//dashboard//" });
+    tap(new RouteCollection({ base: "//dashboard//", children: true }), routes => {
+      routes.add("/");
+      routes.add("home");
+      routes.add("//about");
 
-    routes.add("home");
-    routes.add("//about");
-
-    expect(routes.build()).toEqual([
-      {
-        path: "/dashboard/home",
-        components: {},
-      },
-      {
-        path: "/dashboard/about",
-        components: {},
-      },
-    ]);
-
-    initRoutes({ children: true });
-
-    routes.add("/");
-    routes.add("home");
-    routes.add("//about");
-
-    expect(routes.build()).toEqual([
-      {
-        path: "/",
-        components: {},
-      },
-      {
-        path: "home",
-        components: {},
-      },
-      {
-        path: "about",
-        components: {},
-      },
-    ]);
-
-    initRoutes({ base: "//dashboard//", children: true });
-
-    routes.add("/");
-    routes.add("home");
-    routes.add("//about");
-
-    expect(routes.build()).toEqual([
-      {
-        path: "dashboard",
-        components: {},
-      },
-      {
-        path: "dashboard/home",
-        components: {},
-      },
-      {
-        path: "dashboard/about",
-        components: {},
-      },
-    ]);
+      expect(routes.build()).toEqual([
+        {
+          path: "dashboard",
+          components: {},
+        },
+        {
+          path: "dashboard/home",
+          components: {},
+        },
+        {
+          path: "dashboard/about",
+          components: {},
+        },
+      ]);
+    });
   });
 
   test("can create children from created route", () => {
-    initRoutes();
+    const routes = new RouteCollection();
 
     routes.add("dashboard").children(r => {
       r.add("home").children(r1 => {
@@ -257,7 +251,7 @@ describe("RouteCollection", () => {
   });
 
   test("can create grouped routes", () => {
-    initRoutes();
+    const routes = new RouteCollection();
 
     routes.group({ prefix: "dashboard" }, r => {
       r.add("home");
@@ -277,7 +271,7 @@ describe("RouteCollection", () => {
   });
 
   test("can create grouped routes with children", () => {
-    initRoutes();
+    const routes = new RouteCollection();
 
     routes.group({ prefix: "dashboard" }, r => {
       r.add("home").children(r1 => {
@@ -313,7 +307,7 @@ describe("RouteCollection", () => {
   }
 
   test("can add guard to grouped routes", () => {
-    initRoutes();
+    const routes = new RouteCollection();
 
     routes.group(
       {
@@ -333,7 +327,7 @@ describe("RouteCollection", () => {
   });
 
   test("can add children chained after guards chained after add", () => {
-    initRoutes();
+    const routes = new RouteCollection();
 
     routes
       .add("/home")
