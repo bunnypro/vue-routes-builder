@@ -2,5 +2,6 @@ import { RouteCollection } from "./RouteCollection";
 
 export default RouteCollection;
 
-export { RouteCollectionConfig, RouteGroupConfig } from "./RouteCollection";
-export { RouteBuilderConfig, RouteGuard, RouteGuardHanldeResult } from "./Route";
+export { RouteBuilderConfig } from "./Route";
+export { RouteGroupConfig } from "./RouteCollection";
+export { RouteGuard, RouteGuardHanldeResult } from "./RouteGuard";

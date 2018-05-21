@@ -1,69 +1,79 @@
 import { Component, Dictionary, RouteConfig } from "vue-router/types/router";
-import { RouteBuilderConfig, Route, RouteGuard } from "./Route";
-import { tap } from "./util";
-
-export interface RouteCollectionConfig {
-  base?: string;
-  children?: boolean;
-}
+import { tap, flatten } from "./util";
+import { IRouteCollection } from "./IRouteCollection";
+import { RouteGuardType } from "./RouteGuard";
+import { WrappedRouteCollection } from "./WrappedRouteCollection";
+import { Route, RouteBuilderConfig } from "./Route";
 
 export interface RouteGroupConfig {
   prefix: string;
-  guards?: RouteGuard[];
+  guards?: RouteGuardType[];
 }
 
-export class RouteCollection {
-  private readonly base: string;
-  private readonly children: boolean;
-  private readonly routes: Route[] = [];
+export class RouteCollection implements IRouteCollection {
+  private readonly _base: string;
+  private readonly _guards: RouteGuardType[];
+  private readonly _routes: (Route | IRouteCollection)[] = [];
 
-  constructor(
-    { base = "/", children = false }: RouteCollectionConfig = {
-      base: "/",
-      children: false,
-    },
-  ) {
-    this.base = this.resolveBasePath(base);
-    this.children = children;
+  constructor(base: string = "/", guards?: RouteGuardType[]) {
+    this._base = this.resolveBasePath(base);
+    this._guards = guards || [];
+  }
+
+  get count(): number {
+    return this._routes.length;
   }
 
   add(path: string, view?: Component, views?: Dictionary<Component>, config: RouteBuilderConfig = {}): Route {
-    return tap(new Route(this.resolveRoutePath(path), view, views, config), Array.prototype.push.bind(this.routes));
+    return tap(new Route(path, view, views, config), Array.prototype.push.bind(this._routes));
   }
 
-  group({ prefix, guards = [] }: RouteGroupConfig, fn: (routes: RouteCollection) => void) {
-    this.routes.push(
-      ...tap(
-        new RouteCollection({
-          base: this.resolveRoutePath(prefix),
-          children: this.children,
-        }),
-        fn,
-      ).routes.map(route => tap(route, r => r.guard(...guards))),
+  group(config: RouteGroupConfig, group: RouteCollection | ((routes: RouteCollection) => void)): void {
+    if (group instanceof RouteCollection) {
+      this._routes.push(new WrappedRouteCollection(config, group));
+      return;
+    }
+
+    this._routes.push(tap(new RouteCollection(config.prefix, config.guards), group));
+  }
+
+  append(routes: RouteCollection) {
+    this._routes.push(routes);
+  }
+
+  guards(): RouteGuardType[] {
+    return [...this._guards];
+  }
+
+  build(...parents: IRouteCollection[]): RouteConfig[] {
+    return flatten<RouteConfig>(
+      this._routes.map(route => {
+        return route.build(...parents, this);
+      }),
     );
   }
 
-  private resolveBasePath(path: string): string {
+  protected resolveBasePath(path: string): string {
     const rPath = `/${path}`.replace(/\/+/g, "/");
 
     return rPath === "/" ? rPath : rPath.replace(/\/+$/g, "");
   }
 
-  private resolveRoutePath(path: string): string {
-    const rPath = `${this.base}/${path}`.replace(/\/+/g, "/");
+  resolveRoutePath(path: string): string {
+    return `${this._base}/${path}`.replace(/\/+/g, "/");
+  }
+}
 
-    if (rPath === "/") {
-      return rPath;
-    }
+export class RouteChildren extends RouteCollection {
+  protected resolveBasePath(path: string): string {
+    const rPath = super.resolveBasePath(path);
 
-    return this.children ? rPath.replace(/^\/+/g, "") : rPath;
+    return rPath === "/" ? "/" : rPath.replace(/^\/+/g, "");
   }
 
-  get count(): number {
-    return this.routes.length;
-  }
+  resolveRoutePath(path: string): string {
+    const rPath = super.resolveRoutePath(path);
 
-  build(): RouteConfig[] {
-    return this.routes.map(route => route.build());
+    return rPath === "/" ? "/" : rPath.replace(/^\/+/g, "");
   }
 }

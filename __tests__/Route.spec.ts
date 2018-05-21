@@ -1,6 +1,7 @@
-import { Route, RouteGuard, RouteGuardHanldeResult } from "../lib/Route";
 import { Route as VueRoute } from "vue-router/types/router";
 import { tap } from "../lib/util";
+import { RouteGuard, RouteGuardHanldeResult } from "../lib/RouteGuard";
+import { Route } from "../lib/Route";
 
 describe("Route", () => {
   const Home = { template: "<div>Home</div>" };

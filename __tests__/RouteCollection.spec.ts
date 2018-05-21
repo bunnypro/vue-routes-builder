@@ -1,7 +1,7 @@
-import { RouteCollection, RouteCollectionConfig } from "../lib/RouteCollection";
-import { RouteGuard, RouteGuardHanldeResult } from "../lib/Route";
-import { Route as VueRoute } from "vue-router/types/router";
+import { Route } from "vue-router/types/router";
 import { tap } from "../lib/util";
+import { RouteCollection, RouteChildren } from "../lib/RouteCollection";
+import { RouteGuard, RouteGuardHanldeResult } from "../lib/RouteGuard";
 
 describe("RouteCollection", () => {
   const Home = { template: "<div>Home</div>" };
@@ -104,7 +104,7 @@ describe("RouteCollection", () => {
       ]);
     });
 
-    tap(new RouteCollection({ base: "/dashboard" }), routes => {
+    tap(new RouteCollection("/dashboard"), routes => {
       routes.add("/");
       routes.add("//about");
       routes.add("home");
@@ -125,7 +125,7 @@ describe("RouteCollection", () => {
       ]);
     });
 
-    tap(new RouteCollection({ base: "dashboard/" }), routes => {
+    tap(new RouteCollection("dashboard/"), routes => {
       routes.add("home");
       routes.add("//about");
 
@@ -141,7 +141,7 @@ describe("RouteCollection", () => {
       ]);
     });
 
-    tap(new RouteCollection({ base: "/dashboard/" }), routes => {
+    tap(new RouteCollection("/dashboard/"), routes => {
       routes.add("home");
       routes.add("//about");
 
@@ -157,7 +157,7 @@ describe("RouteCollection", () => {
       ]);
     });
 
-    tap(new RouteCollection({ base: "//dashboard//" }), routes => {
+    tap(new RouteCollection("//dashboard//"), routes => {
       routes.add("home");
       routes.add("//about");
 
@@ -173,7 +173,7 @@ describe("RouteCollection", () => {
       ]);
     });
 
-    tap(new RouteCollection({ children: true }), routes => {
+    tap(new RouteChildren(), routes => {
       routes.add("/");
       routes.add("home");
       routes.add("//about");
@@ -194,7 +194,7 @@ describe("RouteCollection", () => {
       ]);
     });
 
-    tap(new RouteCollection({ base: "//dashboard//", children: true }), routes => {
+    tap(new RouteChildren("//dashboard//"), routes => {
       routes.add("/");
       routes.add("home");
       routes.add("//about");
@@ -270,6 +270,43 @@ describe("RouteCollection", () => {
     ]);
   });
 
+  test("can add grouped routes with passing RouteCollection", () => {
+    const routes = new RouteCollection();
+    const group = new RouteCollection();
+
+    group.add("home");
+
+    routes.group({ prefix: "dashboard" }, group);
+
+    expect(routes.build()).toEqual([
+      {
+        path: "/dashboard/home",
+        components: {},
+      },
+    ]);
+  });
+
+  test("can append RouteCollection to another RouteCollection", () => {
+    const routes = new RouteCollection();
+    const dashboardRoutes = new RouteCollection("dashboard");
+
+    routes.add("/");
+    dashboardRoutes.add("/");
+
+    routes.append(dashboardRoutes);
+
+    expect(routes.build()).toEqual([
+      {
+        path: "/",
+        components: {},
+      },
+      {
+        path: "/dashboard",
+        components: {},
+      },
+    ]);
+  });
+
   test("can create grouped routes with children", () => {
     const routes = new RouteCollection();
 
@@ -301,7 +338,7 @@ describe("RouteCollection", () => {
   });
 
   class RedirectIfNotAuthenticatedGuard extends RouteGuard {
-    handle(from: VueRoute, to: VueRoute): RouteGuardHanldeResult {
+    handle(from: Route, to: Route): RouteGuardHanldeResult {
       return "/";
     }
   }
