@@ -6,17 +6,17 @@ import { WrappedRouteCollection } from "./WrappedRouteCollection";
 import { Route, RouteBuilderConfig } from "./Route";
 
 export interface RouteGroupConfig {
-  prefix: string;
+  prefix?: string;
   guards?: RouteGuardType[];
 }
 
 export class RouteCollection implements IRouteCollection {
-  private readonly _base: string;
+  private readonly _prefix: string;
   private readonly _guards: RouteGuardType[];
   private readonly _routes: (Route | IRouteCollection)[] = [];
 
-  constructor(base: string = "/", guards?: RouteGuardType[]) {
-    this._base = this.resolveBasePath(base);
+  constructor(prefix?: string, guards?: RouteGuardType[]) {
+    this._prefix = this.resolvePrefixPath(prefix || "/");
     this._guards = guards || [];
   }
 
@@ -53,20 +53,20 @@ export class RouteCollection implements IRouteCollection {
     );
   }
 
-  protected resolveBasePath(path: string): string {
+  protected resolvePrefixPath(path: string): string {
     const rPath = `/${path}`.replace(/\/+/g, "/");
 
     return rPath === "/" ? rPath : rPath.replace(/\/+$/g, "");
   }
 
   resolveRoutePath(path: string): string {
-    return `${this._base}/${path}`.replace(/\/+/g, "/");
+    return `${this._prefix}/${path}`.replace(/\/+/g, "/");
   }
 }
 
 export class RouteChildren extends RouteCollection {
-  protected resolveBasePath(path: string): string {
-    const rPath = super.resolveBasePath(path);
+  protected resolvePrefixPath(path: string): string {
+    const rPath = super.resolvePrefixPath(path);
 
     return rPath === "/" ? "/" : rPath.replace(/^\/+/g, "");
   }

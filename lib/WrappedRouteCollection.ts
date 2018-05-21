@@ -9,7 +9,7 @@ export class WrappedRouteCollection implements IRouteCollection {
   private readonly _routes: IRouteCollection;
 
   constructor(config: RouteGroupConfig, routes: IRouteCollection) {
-    this._prefix = config.prefix;
+    this._prefix = config.prefix || "/";
     this._routes = routes;
     this._guards = config.guards || [];
   }
