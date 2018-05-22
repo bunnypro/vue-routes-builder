@@ -388,7 +388,7 @@ describe("RouteCollection", () => {
     }
   }
 
-  test("can use async guard", () => {
+  test("can use async guard", async () => {
     const routes = new RouteCollection();
 
     routes.group(
@@ -401,7 +401,7 @@ describe("RouteCollection", () => {
       },
     );
 
-    return tapAsync(routes.build(), async buildedRoutes => {
+    await tapAsync(routes.build(), async buildedRoutes => {
       await buildedRoutes[0].beforeEnter(null, null, result => {
         expect(result).toEqual("/");
       });
