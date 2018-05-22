@@ -75,24 +75,29 @@ export class Route {
         );
 
         if (guards.length > 0) {
-          config.beforeEnter =
-            config.beforeEnter ||
-            ((to, from, next) => {
-              const guardsPassed = guards.every(guard => {
-                const nextStep = guard instanceof RouteGuard ? guard.handle(to, from) : guard(to, from);
+          config.beforeEnter = async (to, from, next) => {
+            let guardsPassed = true;
 
-                if (nextStep === true || nextStep === undefined || nextStep === null) {
-                  return true;
-                }
+            for (const guard of guards) {
+              let nextStep = guard instanceof RouteGuard ? guard.handle(to, from) : guard(to, from);
 
-                next(nextStep);
-                return false;
-              });
-
-              if (guardsPassed) {
-                next();
+              if (nextStep instanceof Promise) {
+                nextStep = await nextStep;
               }
-            });
+
+              if (nextStep === true || nextStep === undefined || nextStep === null) {
+                continue;
+              }
+
+              next(nextStep);
+              guardsPassed = false;
+              break;
+            }
+
+            if (guardsPassed) {
+              next();
+            }
+          };
         }
       }
     });

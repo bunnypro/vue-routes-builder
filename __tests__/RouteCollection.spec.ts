@@ -1,5 +1,5 @@
 import { Route } from "vue-router/types/router";
-import { tap } from "../lib/util";
+import { tap, tapAsync } from "../lib/util";
 import { RouteCollection, RouteChildren } from "../lib/RouteCollection";
 import { RouteGuard, RouteGuardHanldeResult } from "../lib/RouteGuard";
 
@@ -379,6 +379,32 @@ describe("RouteCollection", () => {
       });
 
       expect(buildedRoutes[0].children[0].beforeEnter).toBeUndefined();
+    });
+  });
+
+  class AsyncGuard extends RouteGuard {
+    async handle(from: Route, to: Route): Promise<RouteGuardHanldeResult> {
+      return new Promise(resolve => setTimeout(resolve, 1000, "/"));
+    }
+  }
+
+  test("can use async guard", () => {
+    const routes = new RouteCollection();
+
+    routes.group(
+      {
+        prefix: "dashboard",
+        guards: [new AsyncGuard()],
+      },
+      r => {
+        r.add("home");
+      },
+    );
+
+    return tapAsync(routes.build(), async buildedRoutes => {
+      await buildedRoutes[0].beforeEnter(null, null, result => {
+        expect(result).toEqual("/");
+      });
     });
   });
 });
