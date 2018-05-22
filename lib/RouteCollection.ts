@@ -16,7 +16,7 @@ export class RouteCollection implements IRouteCollection {
   private readonly _routes: (Route | IRouteCollection)[] = [];
 
   constructor(prefix?: string, guards?: RouteGuardType[]) {
-    this._prefix = this.resolvePrefixPath(prefix || "/");
+    this._prefix = prefix || "/";
     this._guards = guards || [];
   }
 
@@ -53,24 +53,12 @@ export class RouteCollection implements IRouteCollection {
     );
   }
 
-  protected resolvePrefixPath(path: string): string {
-    const rPath = `/${path}`.replace(/\/+/g, "/");
-
-    return rPath === "/" ? rPath : rPath.replace(/\/+$/g, "");
-  }
-
   resolveRoutePath(path: string): string {
-    return `${this._prefix}/${path}`.replace(/\/+/g, "/");
+    return `/${this._prefix}/${path}`.replace(/\/+/g, "/");
   }
 }
 
 export class RouteChildren extends RouteCollection {
-  protected resolvePrefixPath(path: string): string {
-    const rPath = super.resolvePrefixPath(path);
-
-    return rPath === "/" ? "/" : rPath.replace(/^\/+/g, "");
-  }
-
   resolveRoutePath(path: string): string {
     const rPath = super.resolveRoutePath(path);
 
