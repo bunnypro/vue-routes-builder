@@ -7,7 +7,7 @@ import {
   RoutePropsFunction,
   PathToRegexpOptions,
 } from "vue-router/types/router";
-import { tap, pipe, flattenMap } from "./util";
+import { tap, pipe, flatMap } from "./util";
 import { IRouteCollection } from "./IRouteCollection";
 import { RouteGuardType, RouteGuard } from "./RouteGuard";
 import { RouteChildren } from "./RouteCollection";
@@ -70,7 +70,7 @@ export class Route {
       }
 
       if (!config.beforeEnter || !(config.beforeEnter instanceof Function)) {
-        const guards = flattenMap<IRouteCollection, RouteGuardType>(parents, parent => parent.guards()).concat(
+        const guards = flatMap<IRouteCollection, RouteGuardType>(parents, parent => parent.guards()).concat(
           ...this._guards,
         );
 
