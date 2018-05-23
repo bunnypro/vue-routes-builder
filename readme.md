@@ -56,12 +56,12 @@ routes.add("dashboard", null, {
   menu: DashboardMenu,
 });
 
-route.add("post/:id", AboutPage, null, { props: true });
+route.add("post/:id", PostPage, null, { props: true });
 ```
 
 3.  Attach Guard(s) to a Route
 
-    To attach guard(s) to a route you can use `guard` from Route object that accessable with chaining after `add` method. You can specify more that one guards.
+    To attach guard(s) to a route you can use `guard` from Route object that accessible with chaining after `add` method. You can specify more that one guards.
 
 ```ts
 routes.add('dashboard', DashboardPage).guard(
@@ -73,7 +73,7 @@ routes.add('dashboard', DashboardPage).guard(
 
 4.  Create a grouped routes
 
-    To create a grouped routes you can use `group` method of RouteCollection object. The `group` method accept two parameters, the first parameter is a object RouteGroupConfig with `prefix` and `guards` property, and the second parameter is either a callback of routes declaration or a RouteCollection object.
+    To create a grouped routes you can use `group` method of RouteCollection object. The `group` method accept two parameters, the first parameter is an object of RouteGroupConfig with `prefix` and `guards` property, and the second parameter is either a callback of routes declaration or a RouteCollection object.
 
 ```ts
 // with callback of routes declaration
@@ -104,7 +104,7 @@ const authRoutes = new RouteCollection();
 routes.append(authRoutes);
 ```
 
-6.  Creatign RouteGuard
+6.  Creating RouteGuard
 
     To create a route guard, simply create a class with extending RouteGuard abstract class. RouteGuard abstract class provide one method called `handle` that accept two parameters, both parameters are vue-router Route object. `handle` method must return one/more of string|boolean|void|vue-router Location|((vm: Vue) => any) or Promise of those types if you want to create an async guard.
 
