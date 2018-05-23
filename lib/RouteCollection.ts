@@ -1,5 +1,5 @@
 import { Component, Dictionary, RouteConfig } from "vue-router/types/router";
-import { tap, flatten } from "./util";
+import { tap, flatMap } from "./util";
 import { RouteGuardType } from "./RouteGuard";
 import { Route, RouteBuilderConfig } from "./Route";
 
@@ -51,11 +51,7 @@ export class RouteCollection implements IRouteCollection {
   }
 
   build(...parents: IRouteCollection[]): RouteConfig[] {
-    return flatten<RouteConfig>(
-      this._routes.map(route => {
-        return route.build(...parents, this);
-      }),
-    );
+    return flatMap<Route | IRouteCollection, RouteConfig>(this._routes, route => route.build(...parents, this));
   }
 
   resolveRoutePath(path: string): string {
