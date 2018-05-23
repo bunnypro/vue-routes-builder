@@ -8,9 +8,8 @@ import {
   PathToRegexpOptions,
 } from "vue-router/types/router";
 import { tap, pipe, flatMap } from "./util";
-import { IRouteCollection } from "./IRouteCollection";
 import { RouteGuardType, RouteGuard } from "./RouteGuard";
-import { RouteChildren } from "./RouteCollection";
+import { RouteChildren, IRouteCollection } from "./RouteCollection";
 
 export interface RouteBuilderConfig {
   name?: string;

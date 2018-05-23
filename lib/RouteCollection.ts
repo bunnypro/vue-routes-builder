@@ -1,6 +1,5 @@
 import { Component, Dictionary, RouteConfig } from "vue-router/types/router";
 import { tap, flatten } from "./util";
-import { IRouteCollection } from "./IRouteCollection";
 import { RouteGuardType } from "./RouteGuard";
 import { WrappedRouteCollection } from "./WrappedRouteCollection";
 import { Route, RouteBuilderConfig } from "./Route";
@@ -8,6 +7,13 @@ import { Route, RouteBuilderConfig } from "./Route";
 export interface RouteGroupConfig {
   prefix?: string;
   guards?: RouteGuardType[];
+}
+
+export interface IRouteCollection {
+  count: number;
+  build(...parents: IRouteCollection[]): RouteConfig[];
+  guards(): RouteGuardType[];
+  resolveRoutePath(path: string): string;
 }
 
 export class RouteCollection implements IRouteCollection {
