@@ -42,7 +42,7 @@ export class RouteCollection implements IRouteCollection {
     this._routes.push(tap(new RouteCollection(config.prefix, config.guards), group));
   }
 
-  append(routes: RouteCollection) {
+  append(routes: RouteCollection): void {
     this._routes.push(routes);
   }
 
