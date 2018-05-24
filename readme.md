@@ -112,7 +112,7 @@ The callback accept one parameter to be a RouteCollection
 #### Api
 
 ```ts
-Route::children(children: (routes: RouteChildren) => void): void;
+Route::children(children: (routes: RouteCollection) => void): void;
 ```
 
 #### Example
