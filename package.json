@@ -7,6 +7,8 @@
   "license": "MIT",
   "scripts": {
     "build": "yarn clean && yarn test && yarn compile",
+    "publish:coverage": "yarn coverage && codecov",
+    "coverage": "yarn test --coverage",
     "clean": "./node_modules/.bin/rimraf ./dist ./types",
     "test": "./node_modules/.bin/jest",
     "compile": "./node_modules/.bin/rollup -c"
@@ -25,6 +27,7 @@
     "@types/node": "^10.0.8",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-env": "^1.7.0",
+    "codecov": "^3.0.2",
     "jest": "^22.4.3",
     "rimraf": "^2.6.2",
     "rollup": "^0.58.2",
@@ -48,6 +51,10 @@
       "jsx",
       "json",
       "node"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/lib/util/"
     ]
   }
 }

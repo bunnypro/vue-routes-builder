@@ -14,7 +14,8 @@
     "noLib": false,
     "preserveConstEnums": true,
     "suppressImplicitAnyIndexErrors": true,
-    "pretty": true
+    "pretty": true,
+    "sourceMap": true
   },
   "exclude": ["node_modules/*"],
   "files": ["lib/index.ts"],

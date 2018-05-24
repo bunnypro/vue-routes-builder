@@ -5,6 +5,7 @@ build/
 .vscode/
 lib/
 __test__/
+coverage/
 .prettierignore
 rollup.config.js
 tsconfig.json
