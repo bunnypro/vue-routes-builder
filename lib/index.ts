@@ -1,3 +1,2 @@
-import { RouteCollection } from "./RouteCollection";
-export default RouteCollection;
+export { RouteCollection } from "./RouteCollection";
 export { RouteGuard } from "./RouteGuard";

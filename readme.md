@@ -38,11 +38,11 @@ RouteCollection::constructor(prefix?: string, guards?: RouteGuardType[]);
 #### Example
 
 ```ts
-import Routes from "vue-routes-builder";
+import { RouteCollection } from "vue-routes-builder";
 /** another imports ... **/
-const routes = new Routes(); // prefix path is /
+const routes = new RouteCollection(); // prefix path is /
 // or
-const routes = new Routes("dashboard"); // prefix path is /dashboard
+const routes = new RouteCollection("dashboard"); // prefix path is /dashboard
 
 /** routes declaration ... **/
 
@@ -83,7 +83,7 @@ interface RouteBuilderConfig {
 #### Example
 
 ```ts
-const routes = new Routes();
+const routes = new RouteCollection();
 
 routes.add("/", LandingPage);
 
@@ -235,7 +235,7 @@ type RouteGuardHanldeResult = string | boolean | void | Location | ((vm: Vue) =>
 
 ```ts
 import { Route } from "vue-router/types/router";
-import Routes { RouteGuard } from 'vue-routes-builder';
+import { RouteCollection, RouteGuard } from 'vue-routes-builder';
 
 class TokenAvailabilityGuard extends RouteGuard {
   handle(to: Route, from: Route): string|boolean {
