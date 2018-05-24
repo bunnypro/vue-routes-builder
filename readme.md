@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/bunnypro/vue-routes-builder.svg?branch=master)](https://travis-ci.org/bunnypro/vue-routes-builder)
 [![codecov](https://codecov.io/gh/bunnypro/vue-routes-builder/branch/master/graph/badge.svg)](https://codecov.io/gh/bunnypro/vue-routes-builder)
 [![npm](https://img.shields.io/npm/v/vue-routes-builder.svg)](https://www.npmjs.com/package/vue-routes-builder)
-[![License](https://img.shields.io/:license-MIT-blue.svg)](https://github.com/bunnypro/vue-routes-builder/blob/master/license)
+[![License](https://img.shields.io/:license-MIT-green.svg)](https://github.com/bunnypro/vue-routes-builder/blob/master/license)
 
 This library allows you to build a vue-router routes with **method chaining**, enable the ability to use **multiple route guards**, and also **grouping routes** with advantages of prefixing routes group and passing route guards.
 
