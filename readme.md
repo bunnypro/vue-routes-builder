@@ -153,7 +153,7 @@ routes.append(authRoutes);
 
 To create a route guard, simply create a class with extending RouteGuard abstract class. RouteGuard abstract class provide one method called `handle` that accept two parameters, both parameters are vue-router Route object. `handle` method must return one/more of string|boolean|void|vue-router Location|((vm: Vue) => any) or Promise of those types if you want to create an async guard.
 
-Another way to create a RouteGuard is just create a function that have parameters and return type like `RouteGuard::handle` method
+Another way to create a RouteGuard is just create a function that have parameters and return type like `RouteGuard::handle` method.
 
 ```ts
 import { Route } from "vue-router/types/router";
@@ -183,13 +183,15 @@ class TokenAuthenticationGuard extends RouteGuard {
   }
 }
 
-const FunctionGuard = (to: Route, from: Route): string {};
+const FunctionGuard = (to: Route, from: Route): string => {};
+const AsyncFunctionGuard = async (to: Route, from: Route): Promise<string> => {};
 
 routes.group({
   guards: [
     new TokenAvailabilityGuard(),
     new TokenAuthenticationGuard(),
     FunctionGuard,
+    AsyncFunctionGuard,
     ...
   ]
 }, ...);
