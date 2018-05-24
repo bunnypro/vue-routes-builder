@@ -101,8 +101,9 @@ This library will build your RouteGuard(s) and attach them to `beforeEnter` prop
 routes.add("dashboard", DashboardPage).guard(
   new AuthenticationGuard(),
   new AccountActivatedGuard(),
-  (to, from) => {}),
+  (to, from) => {},
   ...
+);
 ```
 
 <a name="create-group"></a>
@@ -119,7 +120,7 @@ The callback of routes declaration accept one parameter to be a RouteCollection.
 // with callback of routes declaration
 route.group({ prefix: 'dashboard' }, group => {
   group.add('profile', DashboardProfile);
-  group.add(...);
+  ...
 });
 // you can also pass guard(a) to group
 route.group({ prefix: 'dashboard', guards: [new AuthenticationGuard()] }, group => {
@@ -191,6 +192,5 @@ routes.group({
     FunctionGuard,
     ...
   ]
-},
-...);
+}, ...);
 ```
