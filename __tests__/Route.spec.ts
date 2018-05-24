@@ -142,11 +142,9 @@ describe("Route", () => {
     }
   }
 
-  class RedirectedGuard extends RouteGuard {
-    handle(from: VueRoute, to: VueRoute): RouteGuardHanldeResult {
-      return "/";
-    }
-  }
+  const RedirectedGuard = (from: VueRoute, to: VueRoute): RouteGuardHanldeResult => {
+    return "/";
+  };
 
   test("can add route guards", () => {
     const route = new Route("/home");
@@ -157,7 +155,7 @@ describe("Route", () => {
       expect([undefined, null]).toContain(result);
     });
 
-    route.guard(new RedirectedGuard());
+    route.guard(RedirectedGuard);
 
     route.build().beforeEnter(null, null, result => {
       expect(result).toEqual("/");
@@ -171,7 +169,7 @@ describe("Route", () => {
       },
     });
 
-    route.guard(new AllowedGuard(), new RedirectedGuard());
+    route.guard(new AllowedGuard(), RedirectedGuard);
 
     route.build().beforeEnter(null, null, result => {
       expect(result).toEqual("/about");
@@ -181,7 +179,7 @@ describe("Route", () => {
   test("can add children chained after guards", () => {
     const route = new Route("/home");
 
-    route.guard(new RedirectedGuard()).children(children => {
+    route.guard(RedirectedGuard).children(children => {
       children.add("about");
     });
 

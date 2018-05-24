@@ -9,24 +9,19 @@ export interface RouteGroupConfig {
 }
 
 export interface IRouteCollection {
-  count: number;
   build(...parents: IRouteCollection[]): RouteConfig[];
   guards(): RouteGuardType[];
   resolveRoutePath(path: string): string;
 }
 
 export class RouteCollection implements IRouteCollection {
-  private readonly _prefix: string;
-  private readonly _guards: RouteGuardType[];
-  private readonly _routes: (Route | IRouteCollection)[] = [];
+  protected readonly _prefix: string;
+  protected readonly _guards: RouteGuardType[];
+  protected readonly _routes: (Route | IRouteCollection)[] = [];
 
   constructor(prefix?: string, guards?: RouteGuardType[]) {
     this._prefix = prefix || "/";
     this._guards = guards || [];
-  }
-
-  get count(): number {
-    return this._routes.length;
   }
 
   add(path: string, view?: Component, views?: Dictionary<Component>, config: RouteBuilderConfig = {}): Route {
@@ -60,6 +55,10 @@ export class RouteCollection implements IRouteCollection {
 }
 
 export class RouteChildren extends RouteCollection {
+  get count(): number {
+    return this._routes.length;
+  }
+
   resolveRoutePath(path: string): string {
     const rPath = super.resolveRoutePath(path);
 
@@ -70,16 +69,12 @@ export class RouteChildren extends RouteCollection {
 export class WrappedRouteCollection implements IRouteCollection {
   private readonly _prefix: string;
   private readonly _guards: RouteGuardType[];
-  private readonly _routes: IRouteCollection;
+  private readonly _routes: RouteCollection;
 
-  constructor(config: RouteGroupConfig, routes: IRouteCollection) {
+  constructor(config: RouteGroupConfig, routes: RouteCollection) {
     this._prefix = config.prefix || "/";
     this._routes = routes;
     this._guards = config.guards || [];
-  }
-
-  get count(): number {
-    return this._routes.count;
   }
 
   guards(): RouteGuardType[] {

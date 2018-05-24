@@ -284,6 +284,16 @@ describe("RouteCollection", () => {
         components: {},
       },
     ]);
+
+    const routes1 = new RouteCollection("dashboard");
+    routes1.group({}, group);
+
+    expect(routes1.build()).toEqual([
+      {
+        path: "/dashboard/home",
+        components: {},
+      },
+    ]);
   });
 
   test("can append RouteCollection to another RouteCollection", () => {
