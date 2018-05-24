@@ -6,17 +6,33 @@
 
 This library allows you to build a vue-router routes with **method chaining**, enable the ability to use **multiple route guards**, and also **grouping routes** with advantages of prefixing routes group and passing route guards.
 
-### Installing
+---
+
+## Installing
 
 `yarn add -D vue-routes-builder`
 
-### Usage
+---
 
-1.  Creating A Routes (RouteCollection)
+## Usage
 
-    vue-routes-builder export default the `RouteCollection` class that can be aliased with `Routes`.
+* [Create Routes](#create-routes)
+* [Add Route](#add-route)
+* [Create Route Children](#create-children)
+* [Attach RouteGuard(s) to a Route](#attach-guard)
+* [Create Grouped Routes](#create-group)
+* [Append RouteCollection](#append-routes)
+* [Create RouteGuard](#create-guard)
 
-    `RouteCollection` accept one optional string parameter as a prefix path.
+---
+
+### Create Routes (RouteCollection)
+
+<a name="create-routes"></a>
+
+vue-routes-builder export default the `RouteCollection` class that can be aliased with `Routes`.
+
+`RouteCollection` accept one optional string parameter as a prefix path.
 
 ```ts
 import Routes from "vue-routes-builder";
@@ -33,14 +49,16 @@ new VueRouter({
 });
 ```
 
-2.  Add a Route
+### Add Route
 
-    Use `add` method of RouteCollection to add a Route. The `add` method accept 4 parameters, first is a string path, second is the component, third is named view components and fourth is a RouteBuilderConfig.
+<a name="add-route"></a>
 
-    * The first parameter is mandatory.
-    * The second is mandatory but you can pass `null` if you specify the third parameter.
-    * The third parameter is optional but you must pass `null` or empty object `{}` if you want to provide the fourth parameter.
-    * The fourth parameter is optional.
+Use `add` method of RouteCollection to add a Route. The `add` method accept 4 parameters, first is a string path, second is the component, third is named view components and fourth is a `RouteBuilderConfig`.
+
+* The first parameter is mandatory.
+* The second is mandatory but you can pass `null` if you specify the third parameter.
+* The third parameter is optional but you must pass `null` or empty object `{}` if you want to provide the fourth parameter.
+* The fourth parameter is optional.
 
 ```ts
 const routes = new Routes();
@@ -59,21 +77,48 @@ routes.add("dashboard", null, {
 route.add("post/:id", PostPage, null, { props: true });
 ```
 
-3.  Attach Guard(s) to a Route
+### Create Route Children
 
-    To attach guard(s) to a route you can use `guard` from Route object that accessible with chaining after `add` method. You can specify more that one guards.
+<a name="create-children"></a>
+
+To Create Route Children you can use `children method` from Route object that accessible with chaining after `add` method.
+
+The `children` method requires one parameter to be a callback of children routes declaration.
+
+The callback accept one parameter to be a RouteCollection
 
 ```ts
-routes.add('dashboard', DashboardPage).guard(
-  new AuthenticationGuard(),
-  new AccountActivatedGuard(),
-  ...
-);
+routes.add("profile", ProfilePage).children(children => {
+  children.add("/", ProfileGeneralPage);
+  children.add("setting", ProfileSettingPage);
+});
 ```
 
-4.  Create a grouped routes
+### Attach RouteGuard(s) to a Route
 
-    To create a grouped routes you can use `group` method of RouteCollection object. The `group` method accept two parameters, the first parameter is an object of RouteGroupConfig with `prefix` and `guards` property, and the second parameter is either a callback of routes declaration or a RouteCollection object.
+<a name="attach-guard"></a>
+
+To attach RouteGuard(s) to a route you can use `guard` from Route object that accessible with chaining after `add` method. You can specify more that one RouteGuard(s).
+
+This library will build your RouteGuard(s) and attach them to `beforeEnter` property of vue-router RouteConfig option. **If you specify the `beforeEnter` property to RouteBuilderConfig option the RouteGuard(s) will not be builded**
+
+```ts
+routes.add("dashboard", DashboardPage).guard(
+  new AuthenticationGuard(),
+  new AccountActivatedGuard(),
+  (to, from) => {}),
+  ...
+```
+
+### Create Grouped Routes
+
+<a name="create-group"></a>
+
+To create a grouped routes you can use `group` method of RouteCollection object.
+
+The `group` method accept two parameters, the first parameter is an object of RouteGroupConfig with `prefix` and `guards` property, and the second parameter is either a callback of routes declaration or a RouteCollection object.
+
+The callback of routes declaration accept one parameter to be a RouteCollection.
 
 ```ts
 // with callback of routes declaration
@@ -93,9 +138,11 @@ dashboardRoutes.add('profile', DashboardProfile);
 routes.group({ prefix: 'dashboard' }, dashboardRoutes);
 ```
 
-5.  Appending RouteCollection
+### Append RouteCollection
 
-    To append two RouteCollection you can use `append` method of RouteCollection object.
+<a name="append-routes"></a>
+
+To append two RouteCollection you can use `append` method of RouteCollection object.
 
 ```ts
 const routes = new RouteCollection();
@@ -104,9 +151,13 @@ const authRoutes = new RouteCollection();
 routes.append(authRoutes);
 ```
 
-6.  Creating RouteGuard
+### Create RouteGuard
 
-    To create a route guard, simply create a class with extending RouteGuard abstract class. RouteGuard abstract class provide one method called `handle` that accept two parameters, both parameters are vue-router Route object. `handle` method must return one/more of string|boolean|void|vue-router Location|((vm: Vue) => any) or Promise of those types if you want to create an async guard.
+<a name="create-guard"></a>
+
+To create a route guard, simply create a class with extending RouteGuard abstract class. RouteGuard abstract class provide one method called `handle` that accept two parameters, both parameters are vue-router Route object. `handle` method must return one/more of string|boolean|void|vue-router Location|((vm: Vue) => any) or Promise of those types if you want to create an async guard.
+
+Another way to create a RouteGuard is just create a function that have parameters and return type like `RouteGuard::handle` method
 
 ```ts
 import { Route } from "vue-router/types/router";
@@ -136,5 +187,15 @@ class TokenAuthenticationGuard extends RouteGuard {
   }
 }
 
-routes.group({ guards: [new TokenAvailabilityGuard(), new TokenAuthenticationGuard()] }, ...);
+const FunctionGuard = (to: Route, from: Route): string {};
+
+routes.group({
+  guards: [
+    new TokenAvailabilityGuard(),
+    new TokenAuthenticationGuard(),
+    FunctionGuard,
+    ...
+  ]
+},
+...);
 ```
