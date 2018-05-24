@@ -75,8 +75,6 @@ export class Route {
 
         if (guards.length > 0) {
           config.beforeEnter = async (to, from, next) => {
-            let guardsPassed = true;
-
             for (const guard of guards) {
               let nextStep = guard instanceof RouteGuard ? guard.handle(to, from) : guard(to, from);
 
@@ -89,13 +87,10 @@ export class Route {
               }
 
               next(nextStep);
-              guardsPassed = false;
-              break;
+              return;
             }
 
-            if (guardsPassed) {
-              next();
-            }
+            next();
           };
         }
       }
