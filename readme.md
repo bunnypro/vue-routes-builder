@@ -6,13 +6,9 @@
 
 This library allows you to build a vue-router routes with **method chaining**, enable the ability to use **multiple route guards**, and also **grouping routes** with advantages of prefixing routes group and passing route guards.
 
----
-
 ## Installing
 
 `yarn add -D vue-routes-builder`
-
----
 
 ## Usage
 
@@ -24,11 +20,9 @@ This library allows you to build a vue-router routes with **method chaining**, e
 * [Append RouteCollection](#append-routes)
 * [Create RouteGuard](#create-guard)
 
----
+<a name="create-routes"></a>
 
 ### Create Routes (RouteCollection)
-
-<a name="create-routes"></a>
 
 vue-routes-builder export default the `RouteCollection` class that can be aliased with `Routes`.
 
@@ -49,9 +43,9 @@ new VueRouter({
 });
 ```
 
-### Add Route
-
 <a name="add-route"></a>
+
+### Add Route
 
 Use `add` method of RouteCollection to add a Route. The `add` method accept 4 parameters, first is a string path, second is the component, third is named view components and fourth is a `RouteBuilderConfig`.
 
@@ -77,9 +71,9 @@ routes.add("dashboard", null, {
 route.add("post/:id", PostPage, null, { props: true });
 ```
 
-### Create Route Children
-
 <a name="create-children"></a>
+
+### Create Route Children
 
 To Create Route Children you can use `children method` from Route object that accessible with chaining after `add` method.
 
@@ -94,9 +88,9 @@ routes.add("profile", ProfilePage).children(children => {
 });
 ```
 
-### Attach RouteGuard(s) to a Route
-
 <a name="attach-guard"></a>
+
+### Attach RouteGuard(s) to a Route
 
 To attach RouteGuard(s) to a route you can use `guard` from Route object that accessible with chaining after `add` method. You can specify more that one RouteGuard(s).
 
@@ -110,9 +104,9 @@ routes.add("dashboard", DashboardPage).guard(
   ...
 ```
 
-### Create Grouped Routes
-
 <a name="create-group"></a>
+
+### Create Grouped Routes
 
 To create a grouped routes you can use `group` method of RouteCollection object.
 
@@ -138,9 +132,9 @@ dashboardRoutes.add('profile', DashboardProfile);
 routes.group({ prefix: 'dashboard' }, dashboardRoutes);
 ```
 
-### Append RouteCollection
-
 <a name="append-routes"></a>
+
+### Append RouteCollection
 
 To append two RouteCollection you can use `append` method of RouteCollection object.
 
@@ -151,9 +145,9 @@ const authRoutes = new RouteCollection();
 routes.append(authRoutes);
 ```
 
-### Create RouteGuard
-
 <a name="create-guard"></a>
+
+### Create RouteGuard
 
 To create a route guard, simply create a class with extending RouteGuard abstract class. RouteGuard abstract class provide one method called `handle` that accept two parameters, both parameters are vue-router Route object. `handle` method must return one/more of string|boolean|void|vue-router Location|((vm: Vue) => any) or Promise of those types if you want to create an async guard.
 
