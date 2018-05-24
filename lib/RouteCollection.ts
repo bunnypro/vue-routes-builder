@@ -24,6 +24,10 @@ export class RouteCollection implements IRouteCollection {
     this._guards = guards || [];
   }
 
+  get count(): number {
+    return this._routes.length;
+  }
+
   add(path: string, view?: Component, views?: Dictionary<Component>, config: RouteBuilderConfig = {}): Route {
     return tap(new Route(path, view, views, config), Array.prototype.push.bind(this._routes));
   }
@@ -55,10 +59,6 @@ export class RouteCollection implements IRouteCollection {
 }
 
 export class RouteChildren extends RouteCollection {
-  get count(): number {
-    return this._routes.length;
-  }
-
   resolveRoutePath(path: string): string {
     const rPath = super.resolveRoutePath(path);
 
@@ -67,9 +67,9 @@ export class RouteChildren extends RouteCollection {
 }
 
 export class WrappedRouteCollection implements IRouteCollection {
-  private readonly _prefix: string;
-  private readonly _guards: RouteGuardType[];
-  private readonly _routes: RouteCollection;
+  protected readonly _prefix: string;
+  protected readonly _guards: RouteGuardType[];
+  protected readonly _routes: RouteCollection;
 
   constructor(config: RouteGroupConfig, routes: RouteCollection) {
     this._prefix = config.prefix || "/";
@@ -77,8 +77,12 @@ export class WrappedRouteCollection implements IRouteCollection {
     this._guards = config.guards || [];
   }
 
+  get count(): number {
+    return this._routes.count;
+  }
+
   guards(): RouteGuardType[] {
-    return [...this._routes.guards(), ...this._guards];
+    return [...this._guards];
   }
 
   build(...parents: IRouteCollection[]): RouteConfig[] {
@@ -86,6 +90,14 @@ export class WrappedRouteCollection implements IRouteCollection {
   }
 
   resolveRoutePath(path: string): string {
-    return `${this._prefix}/${path}`;
+    return `/${this._prefix}/${path}`.replace(/\/+/g, "/");
+  }
+}
+
+export class WrappedRouteChildren extends WrappedRouteCollection {
+  resolveRoutePath(path: string): string {
+    const rPath = super.resolveRoutePath(path);
+
+    return rPath === "/" ? "/" : rPath.replace(/^\/+/g, "");
   }
 }

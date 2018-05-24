@@ -2,6 +2,7 @@ import { Route as VueRoute } from "vue-router/types/router";
 import { tap } from "../lib/util";
 import { RouteGuard, RouteGuardHanldeResult } from "../lib/RouteGuard";
 import { Route } from "../lib/Route";
+import { RouteCollection } from "../lib/RouteCollection";
 
 describe("Route", () => {
   const Home = { template: "<div>Home</div>" };
@@ -189,6 +190,26 @@ describe("Route", () => {
       });
 
       expect(buidedRoute.children[0].beforeEnter).toBeUndefined();
+    });
+  });
+
+  test("can add RouteCollection to children", () => {
+    const route = new Route("/home");
+    const children = new RouteCollection();
+
+    children.add("/about");
+
+    route.children(children);
+
+    expect(route.build()).toEqual({
+      path: "/home",
+      components: {},
+      children: [
+        {
+          path: "about",
+          components: {},
+        },
+      ],
     });
   });
 });
