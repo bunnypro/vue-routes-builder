@@ -64,7 +64,7 @@ export class Route {
 
       config.path = pipe(this._path, ...pathResolvers);
 
-      if (this._children && this._children.count) {
+      if (this._children && this._children.count > 0) {
         config.children = this._children.build();
       }
 
