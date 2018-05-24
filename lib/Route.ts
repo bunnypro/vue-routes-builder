@@ -51,8 +51,8 @@ export class Route {
     return this;
   }
 
-  children(children: RouteChildren | ((routes: RouteChildren) => void)): void {
-    this._children = children instanceof RouteChildren ? children : tap(new RouteChildren(), children);
+  children(children: (routes: RouteChildren) => void): void {
+    this._children = tap(new RouteChildren(), children);
   }
 
   build(...parents: IRouteCollection[]): RouteConfig {
