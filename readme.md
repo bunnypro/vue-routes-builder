@@ -72,6 +72,21 @@ routes.add("dashboard", null, {
 route.add("post/:id", PostPage, null, { props: true });
 ```
 
+**RouteBuilderConfig**
+
+```ts
+interface RouteBuilderConfig {
+  name?: string;
+  redirect?: RedirectOption;
+  alias?: string | string[];
+  meta?: any;
+  beforeEnter?: NavigationGuard;
+  props?: boolean | Object | RoutePropsFunction;
+  caseSensitive?: boolean;
+  pathToRegexpOptions?: PathToRegexpOptions;
+}
+```
+
 <a name="create-children"></a>
 
 ### Create Route Children
