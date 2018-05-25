@@ -9,7 +9,7 @@ import {
 } from "vue-router/types/router";
 import { tap, pipe, flatMap } from "./util";
 import { RouteGuardType, RouteGuard } from "./RouteGuard";
-import { RouteChildren, IRouteCollection, WrappedRouteChildren, RouteCollection } from "./RouteCollection";
+import { RouteChildren, IRouteCollection, RouteChildrenWrapper, RouteCollection } from "./RouteCollection";
 
 export interface RouteBuilderConfig {
   name?: string;
@@ -26,7 +26,7 @@ export class Route {
   private readonly _path: string;
   private readonly _components: Dictionary<Component>;
   private readonly _config: RouteBuilderConfig;
-  private _children: RouteChildren | WrappedRouteChildren;
+  private _children: RouteChildren | RouteChildrenWrapper;
   private readonly _guards: RouteGuardType[] = [];
 
   constructor(path: string, view?: Component, views?: Dictionary<Component>, config: RouteBuilderConfig = {}) {
@@ -53,7 +53,7 @@ export class Route {
 
   children(children: RouteCollection | ((routes: RouteChildren) => void)): void {
     if (children instanceof RouteCollection) {
-      this._children = new WrappedRouteChildren({}, children);
+      this._children = new RouteChildrenWrapper({}, children);
       return;
     }
 

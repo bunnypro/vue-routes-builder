@@ -34,7 +34,7 @@ export class RouteCollection implements IRouteCollection {
 
   group(config: RouteCollectionConfig, group: RouteCollection | ((routes: RouteCollection) => void)): void {
     if (group instanceof RouteCollection) {
-      this._routes.push(new WrappedRouteCollection(config, group));
+      this._routes.push(new RouteCollectionWrapper(config, group));
       return;
     }
 
@@ -66,7 +66,7 @@ export class RouteChildren extends RouteCollection {
   }
 }
 
-export class WrappedRouteCollection implements IRouteCollection {
+export class RouteCollectionWrapper implements IRouteCollection {
   protected readonly _prefix: string;
   protected readonly _guards: RouteGuardType[];
   protected readonly _routes: RouteCollection;
@@ -94,7 +94,7 @@ export class WrappedRouteCollection implements IRouteCollection {
   }
 }
 
-export class WrappedRouteChildren extends WrappedRouteCollection {
+export class RouteChildrenWrapper extends RouteCollectionWrapper {
   resolveRoutePath(path: string): string {
     const rPath = super.resolveRoutePath(path);
 
