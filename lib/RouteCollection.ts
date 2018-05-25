@@ -3,7 +3,7 @@ import { tap, flatMap } from "./util";
 import { RouteGuardType } from "./RouteGuard";
 import { Route, RouteBuilderConfig } from "./Route";
 
-export interface RouteGroupConfig {
+export interface RouteCollectionConfig {
   prefix?: string;
   guards?: RouteGuardType[];
 }
@@ -32,7 +32,7 @@ export class RouteCollection implements IRouteCollection {
     return tap(new Route(path, view, views, config), Array.prototype.push.bind(this._routes));
   }
 
-  group(config: RouteGroupConfig, group: RouteCollection | ((routes: RouteCollection) => void)): void {
+  group(config: RouteCollectionConfig, group: RouteCollection | ((routes: RouteCollection) => void)): void {
     if (group instanceof RouteCollection) {
       this._routes.push(new WrappedRouteCollection(config, group));
       return;
@@ -71,7 +71,7 @@ export class WrappedRouteCollection implements IRouteCollection {
   protected readonly _guards: RouteGuardType[];
   protected readonly _routes: RouteCollection;
 
-  constructor(config: RouteGroupConfig, routes: RouteCollection) {
+  constructor(config: RouteCollectionConfig, routes: RouteCollection) {
     this._prefix = config.prefix || "/";
     this._routes = routes;
     this._guards = config.guards || [];
