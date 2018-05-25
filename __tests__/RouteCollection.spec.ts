@@ -104,7 +104,7 @@ describe("RouteCollection", () => {
       ]);
     });
 
-    tap(new RouteCollection("/dashboard"), routes => {
+    tap(new RouteCollection({ prefix: "/dashboard" }), routes => {
       routes.add("/");
       routes.add("//about");
       routes.add("home");
@@ -125,7 +125,7 @@ describe("RouteCollection", () => {
       ]);
     });
 
-    tap(new RouteCollection("dashboard/"), routes => {
+    tap(new RouteCollection({ prefix: "dashboard/" }), routes => {
       routes.add("home");
       routes.add("//about");
 
@@ -141,7 +141,7 @@ describe("RouteCollection", () => {
       ]);
     });
 
-    tap(new RouteCollection("/dashboard/"), routes => {
+    tap(new RouteCollection({ prefix: "/dashboard/" }), routes => {
       routes.add("home");
       routes.add("//about");
 
@@ -157,7 +157,7 @@ describe("RouteCollection", () => {
       ]);
     });
 
-    tap(new RouteCollection("//dashboard//"), routes => {
+    tap(new RouteCollection({ prefix: "//dashboard//" }), routes => {
       routes.add("home");
       routes.add("//about");
 
@@ -194,7 +194,7 @@ describe("RouteCollection", () => {
       ]);
     });
 
-    tap(new RouteChildren("//dashboard//"), routes => {
+    tap(new RouteChildren({ prefix: "//dashboard//" }), routes => {
       routes.add("/");
       routes.add("home");
       routes.add("//about");
@@ -285,7 +285,7 @@ describe("RouteCollection", () => {
       },
     ]);
 
-    const routes1 = new RouteCollection("dashboard");
+    const routes1 = new RouteCollection({ prefix: "dashboard" });
     routes1.group({}, group);
 
     expect(routes1.build()).toEqual([
@@ -298,7 +298,7 @@ describe("RouteCollection", () => {
 
   test("can append RouteCollection to another RouteCollection", () => {
     const routes = new RouteCollection();
-    const dashboardRoutes = new RouteCollection("dashboard");
+    const dashboardRoutes = new RouteCollection({ prefix: "dashboard" });
 
     routes.add("/");
     dashboardRoutes.add("/");

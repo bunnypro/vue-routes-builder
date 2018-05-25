@@ -19,9 +19,9 @@ export class RouteCollection implements IRouteCollection {
   protected readonly _guards: RouteGuardType[];
   protected readonly _routes: (Route | IRouteCollection)[] = [];
 
-  constructor(prefix?: string, guards?: RouteGuardType[]) {
-    this._prefix = prefix || "/";
-    this._guards = guards || [];
+  constructor(config: RouteCollectionConfig = {}) {
+    this._prefix = config.prefix || "/";
+    this._guards = config.guards || [];
   }
 
   get count(): number {
@@ -38,7 +38,7 @@ export class RouteCollection implements IRouteCollection {
       return;
     }
 
-    this._routes.push(tap(new RouteCollection(config.prefix, config.guards), group));
+    this._routes.push(tap(new RouteCollection(config), group));
   }
 
   append(routes: RouteCollection): void {
