@@ -25,14 +25,19 @@ This library allows you to build a vue-router routes with **method chaining**, e
 
 ### Create Routes (RouteCollection)
 
-vue-routes-builder export default the `RouteCollection` class that can be aliased with `Routes`.
+vue-routes-builder export default the `RouteCollection` class.
 
-`RouteCollection` accept one optional string parameter as a prefix path.
+`RouteCollection` accept one optional `RouteCollectionConfig`.
 
 #### Api
 
 ```ts
-RouteCollection::constructor(prefix?: string, guards?: RouteGuardType[]);
+RouteCollection::constructor(config: RouteCollectionConfig = {});
+
+interface RouteCollectionConfig {
+    prefix?: string;
+    guards?: RouteGuardType[];
+}
 ```
 
 #### Example
@@ -42,7 +47,7 @@ import { RouteCollection } from "vue-routes-builder";
 /** another imports ... **/
 const routes = new RouteCollection(); // prefix path is /
 // or
-const routes = new RouteCollection("dashboard"); // prefix path is /dashboard
+const routes = new RouteCollection({ prefix: "dashboard" }); // prefix path is /dashboard
 
 /** routes declaration ... **/
 
@@ -155,19 +160,14 @@ routes.add("dashboard", DashboardPage).guard(
 
 To create a grouped routes you can use `group` method of RouteCollection object.
 
-The `group` method accept two parameters, the first parameter is an object of RouteGroupConfig with `prefix` and `guards` property, and the second parameter is either a callback of routes declaration or a RouteCollection object.
+The `group` method accept two parameters, the first parameter is an object of RouteCollectionConfig with `prefix` and `guards` property, and the second parameter is either a callback of routes declaration or a RouteCollection object.
 
 The callback of routes declaration accept one parameter to be a RouteCollection.
 
 #### Api
 
 ```ts
-RouteCollection::group(config: RouteGroupConfig, group: RouteCollection | ((routes: RouteCollection) => void)): void;
-
-interface RouteGroupConfig {
-    prefix?: string;
-    guards?: RouteGuardType[];
-}
+RouteCollection::group(config: RouteCollectionConfig, group: RouteCollection | ((routes: RouteCollection) => void)): void;
 ```
 
 #### Example
