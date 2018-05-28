@@ -8,7 +8,7 @@ import {
   PathToRegexpOptions,
 } from "vue-router/types/router";
 import { tap, pipe, flatMap } from "./util";
-import { RouteGuardType, RouteGuard } from "./RouteGuard";
+import { RouteGuardType, RouteGuard, RouteGuardHanldeResult } from "./RouteGuard";
 import { RouteChildren, IRouteCollection, RouteChildrenWrapper, RouteCollection } from "./RouteCollection";
 
 export interface RouteBuilderConfig {
@@ -79,23 +79,32 @@ export class Route {
         );
 
         if (guards.length > 0) {
-          config.beforeEnter = async (to, from, next) => {
+          config.beforeEnter = (to, from, next) => {
+            const promises: Promise<RouteGuardHanldeResult>[] = [];
+
             for (const guard of guards) {
               let nextStep = guard instanceof RouteGuard ? guard.handle(to, from) : guard(to, from);
 
               if (nextStep instanceof Promise) {
-                nextStep = await nextStep;
-              }
-
-              if (nextStep === true || nextStep === undefined || nextStep === null) {
+                promises.push(nextStep);
                 continue;
               }
 
-              next(nextStep);
-              return;
+              promises.push(new Promise(resolve => resolve(nextStep)));
             }
 
-            next();
+            Promise.all(promises).then(results => {
+              for (const result of results) {
+                if (result === true || result === undefined || result === null) {
+                  continue;
+                }
+
+                next(result);
+                return;
+              }
+
+              next();
+            })
           };
         }
       }
