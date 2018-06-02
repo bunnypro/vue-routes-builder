@@ -25,7 +25,7 @@ This library allows you to build a vue-router routes with **method chaining**, e
 
 ### Create Routes (RouteCollection)
 
-vue-routes-builder export default the `RouteCollection` class.
+vue-routes-builder export the `RouteCollection` class.
 
 `RouteCollection` accept one optional `RouteCollectionConfig`.
 
