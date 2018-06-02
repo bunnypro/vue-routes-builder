@@ -79,11 +79,11 @@ export class Route {
         );
 
         if (guards.length > 0) {
-          config.beforeEnter = (to, from, next) => {
+          config.beforeEnter = function(to, from, next) {
             const promises: Promise<RouteGuardHanldeResult>[] = [];
 
             for (const guard of guards) {
-              let nextStep = guard instanceof RouteGuard ? guard.handle(to, from) : guard(to, from);
+              let nextStep = guard instanceof RouteGuard ? guard.handle(this, to, from) : guard(this, to, from);
 
               if (nextStep instanceof Promise) {
                 promises.push(nextStep);
@@ -104,7 +104,7 @@ export class Route {
               }
 
               next();
-            })
+            });
           };
         }
       }
