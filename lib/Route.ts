@@ -8,7 +8,7 @@ import {
   PathToRegexpOptions,
 } from "vue-router/types/router";
 import { tap, pipe, flatMap } from "./util";
-import { RouteGuardType, RouteGuard, RouteGuardHanldeResult } from "./RouteGuard";
+import { RouteGuardType, RouteGuard, RouteGuardResult } from "./RouteGuard";
 import { RouteChildren, IRouteCollection, RouteChildrenWrapper, RouteCollection } from "./RouteCollection";
 
 export interface RouteBuilderConfig {
@@ -80,7 +80,7 @@ export class Route {
 
         if (guards.length > 0) {
           config.beforeEnter = (to, from, next) => {
-            const promises: Promise<RouteGuardHanldeResult>[] = [];
+            const promises: Promise<RouteGuardResult>[] = [];
 
             for (const guard of guards) {
               let nextStep = guard instanceof RouteGuard ? guard.handle(to, from) : guard(to, from);

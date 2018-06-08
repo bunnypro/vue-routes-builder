@@ -1,7 +1,7 @@
 import { Route } from "vue-router/types/router";
 import { tap, tapAsync } from "../lib/util";
 import { RouteCollection, RouteChildren } from "../lib/RouteCollection";
-import { RouteGuard, RouteGuardHanldeResult } from "../lib/RouteGuard";
+import { RouteGuard } from "../lib/RouteGuard";
 
 describe("RouteCollection", () => {
   const Home = { template: "<div>Home</div>" };
@@ -348,7 +348,7 @@ describe("RouteCollection", () => {
   });
 
   class RedirectIfNotAuthenticatedGuard extends RouteGuard {
-    handle(from: Route, to: Route): RouteGuardHanldeResult {
+    handle(from: Route, to: Route): string {
       return "/";
     }
   }
@@ -393,7 +393,7 @@ describe("RouteCollection", () => {
   });
 
   class AsyncGuard extends RouteGuard {
-    async handle(from: Route, to: Route): Promise<RouteGuardHanldeResult> {
+    async handle(from: Route, to: Route): Promise<any> {
       return new Promise(resolve => setTimeout(resolve, 1000, "/"));
     }
   }
