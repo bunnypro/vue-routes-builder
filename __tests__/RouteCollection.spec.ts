@@ -424,7 +424,12 @@ describe("RouteCollection", () => {
     routes.group(
       {
         prefix: "dashboard",
-        guards: [new AsyncGuard()],
+        guards: [
+          (to, from) => {
+            return new Promise(resolve => setTimeout(resolve, 2000, true));
+          },
+          new AsyncGuard(),
+        ],
       },
       r => {
         r.add("home").guard((to, from) => {
