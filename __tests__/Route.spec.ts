@@ -1,6 +1,6 @@
 import { Route as VueRoute } from "vue-router/types/router";
 import { tap } from "../lib/util";
-import { RouteGuard, RouteGuardHanldeResult } from "../lib/RouteGuard";
+import { RouteGuard } from "../lib/RouteGuard";
 import { Route } from "../lib/Route";
 import { RouteCollection } from "../lib/RouteCollection";
 
@@ -138,12 +138,12 @@ describe("Route", () => {
   });
 
   class AllowedGuard extends RouteGuard {
-    handle(from: VueRoute, to: VueRoute): RouteGuardHanldeResult {
+    handle(from: VueRoute, to: VueRoute): true {
       return true;
     }
   }
 
-  const RedirectedGuard = (from: VueRoute, to: VueRoute): RouteGuardHanldeResult => {
+  const RedirectedGuard = (from: VueRoute, to: VueRoute): string => {
     return "/";
   };
 
