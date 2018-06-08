@@ -67,7 +67,10 @@ export class Route {
         .reverse()
         .concat(this.resolvePath);
 
-      config.path = pipe(this._path, ...pathResolvers);
+      config.path = pipe(
+        this._path,
+        ...pathResolvers,
+      );
 
       if (this._children && this._children.count > 0) {
         config.children = this._children.build();
