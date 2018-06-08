@@ -197,7 +197,9 @@ describe("Route", () => {
     const route = new Route("/home");
     const children = new RouteCollection();
 
+    children.add("/");
     children.add("/about");
+    children.add("home");
 
     route.children(children);
 
@@ -206,7 +208,15 @@ describe("Route", () => {
       components: {},
       children: [
         {
+          path: "/",
+          components: {},
+        },
+        {
           path: "about",
+          components: {},
+        },
+        {
+          path: "home",
           components: {},
         },
       ],
