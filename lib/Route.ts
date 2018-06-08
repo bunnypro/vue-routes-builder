@@ -80,25 +80,8 @@ export class Route {
 
         if (guards.length > 0) {
           config.beforeEnter = (to, from, next) => {
-            const promises: Promise<RouteGuardResult>[] = [];
-
-            for (const guard of guards) {
-              let nextStep = guard instanceof RouteGuard ? guard.handle(to, from) : guard(to, from);
-
-              if (nextStep instanceof Promise) {
-                promises.push(nextStep);
-                continue;
-              }
-
-              promises.push(new Promise(resolve => resolve(nextStep)));
-            }
-
-            Promise.all(promises).then(results => {
-              for (const result of results) {
-                if (result === true || result === undefined || result === null) {
-                  continue;
-                }
-
+            return this.recursiveGuardsResolver(guards, to, from).then(({ result }) => {
+              if (result !== true && result !== undefined && result !== null) {
                 next(result);
                 return;
               }
@@ -115,5 +98,33 @@ export class Route {
     const rPath = path.replace(/\/+/g, "/");
 
     return rPath === "/" ? "/" : rPath.replace(/\/+$/g, "");
+  }
+
+  private recursiveGuardsResolver(guards: RouteGuardType[], to, from): Promise<{ result?: any }> {
+    const _guards = [...guards];
+    return new Promise((resolve, reject) => {
+      const guard = _guards.shift();
+      const result = guard instanceof RouteGuard ? guard.handle(to, from) : guard(to, from);
+
+      const handle = value => {
+        if ((value !== true && value !== undefined && value !== null) || _guards.length === 0) {
+          resolve({ result: value });
+          return;
+        }
+
+        this.recursiveGuardsResolver(_guards, to, from)
+          .then(resolve)
+          .catch(reject);
+        return;
+      };
+
+      if (result instanceof Promise) {
+        result.then(handle).catch(reject);
+        return;
+      }
+
+      handle(result);
+      return;
+    });
   }
 }

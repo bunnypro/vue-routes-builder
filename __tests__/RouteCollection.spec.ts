@@ -398,7 +398,7 @@ describe("RouteCollection", () => {
     }
   }
 
-  test("can use async guard", async () => {
+  test("can use async guard", () => {
     const routes = new RouteCollection();
 
     routes.group(
@@ -411,7 +411,29 @@ describe("RouteCollection", () => {
       },
     );
 
-    await tapAsync(routes.build(), async buildedRoutes => {
+    return tapAsync(routes.build(), async buildedRoutes => {
+      await buildedRoutes[0].beforeEnter(null, null, result => {
+        expect(result).toEqual("/");
+      });
+    });
+  });
+
+  test("guard should be resolved by correct order", () => {
+    const routes = new RouteCollection();
+
+    routes.group(
+      {
+        prefix: "dashboard",
+        guards: [new AsyncGuard()],
+      },
+      r => {
+        r.add("home").guard((to, from) => {
+          return "/auth";
+        });
+      },
+    );
+
+    return tapAsync(routes.build(), async buildedRoutes => {
       await buildedRoutes[0].beforeEnter(null, null, result => {
         expect(result).toEqual("/");
       });
