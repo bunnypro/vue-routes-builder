@@ -37,7 +37,7 @@ export class Route {
     this._config = config;
   }
 
-  components(views?: Dictionary<Component>) {
+  components(views: Dictionary<Component>) {
     this._components = {
       ...this._components,
       ...views,
