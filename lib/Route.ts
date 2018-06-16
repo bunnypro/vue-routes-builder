@@ -29,20 +29,12 @@ export class Route {
   private _children: RouteChildren | RouteChildrenWrapper;
   private readonly _guards: RouteGuardType[] = [];
 
-  constructor(path: string, view?: Component, views?: Dictionary<Component>, config: RouteBuilderConfig = {}) {
+  constructor(path: string, view?: Component, config: RouteBuilderConfig = {}) {
     this._path = path;
-    this._components = this.resolveComponents(view, views);
-    this._config = config;
-  }
-
-  private resolveComponents(view?: Component, views?: Dictionary<Component>): Dictionary<Component> {
-    const components = { ...(views || {}) };
-
     if (view) {
-      components.default = view;
+      this._components = { default: view };
     }
-
-    return components;
+    this._config = config;
   }
 
   guard(...guards: RouteGuardType[]): Route {
