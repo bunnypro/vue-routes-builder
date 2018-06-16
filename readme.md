@@ -92,7 +92,7 @@ const routes = new RouteCollection();
 
 routes.add("/", LandingPage);
 
-route.add("post/:id", PostPage { props: true });
+routes.add("post/:id", PostPage { props: true });
 ```
 
 ### Add Named View
