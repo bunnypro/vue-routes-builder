@@ -117,11 +117,37 @@ describe("Route", () => {
     });
   });
 
-  test("can add redirect option with dedicated config", () => {
+  test("can add redirect route config option with dedicated method", () => {
     const route = new Route("/home", Home).redirect("/about");
     const route2 = new Route("/home", Home, { redirect: "/about" });
 
     expect(route.build()).toEqual(route2.build());
+  });
+
+  test("can add alias route config option with dedicated method", () => {
+    const route = new Route("/home").alias("/about");
+
+    expect(route.build()).toEqual({
+      path: "/home",
+      components: {},
+      alias: ["/about"],
+    });
+
+    route.alias("/dashboard");
+
+    expect(route.build()).toEqual({
+      path: "/home",
+      components: {},
+      alias: ["/about", "/dashboard"],
+    });
+
+    route.alias(["/a", "/b"]);
+
+    expect(route.build()).toEqual({
+      path: "/home",
+      components: {},
+      alias: ["/about", "/dashboard", "/a", "/b"],
+    });
   });
 
   test("can create children", () => {

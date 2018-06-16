@@ -70,6 +70,20 @@ export class Route {
     return this;
   }
 
+  alias(alias: string | string[]) {
+    if (!this._config.alias) {
+      this._config.alias = [];
+    }
+
+    if (!(alias instanceof Array)) {
+      alias = [alias];
+    }
+
+    (this._config.alias as string[]).push(...alias);
+
+    return this;
+  }
+
   guard(...guards: RouteGuardType[]): Route {
     this._guards.push(...guards);
 
