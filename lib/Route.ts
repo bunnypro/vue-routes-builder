@@ -37,6 +37,13 @@ export class Route {
     this._config = config;
   }
 
+  component(view: Component) {
+    this._components = {
+      ...this._components,
+      default: view,
+    };
+  }
+
   components(views: Dictionary<Component>) {
     this._components = {
       ...this._components,
