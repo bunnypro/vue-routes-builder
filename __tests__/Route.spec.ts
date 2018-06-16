@@ -174,6 +174,16 @@ describe("Route", () => {
     });
   });
 
+  test("can define props from dedicated method", () => {
+    const route = new Route("/home").props(true);
+
+    expect(route.build()).toEqual({
+      path: "/home",
+      components: {},
+      props: true,
+    });
+  });
+
   test("can create children", () => {
     const route = new Route("/home");
 

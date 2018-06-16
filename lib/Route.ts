@@ -92,6 +92,12 @@ export class Route {
     return this;
   }
 
+  props(props: boolean | Object | RoutePropsFunction) {
+    this._config.props = props;
+
+    return this;
+  }
+
   guard(...guards: RouteGuardType[]): Route {
     this._guards.push(...guards);
 
