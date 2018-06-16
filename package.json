@@ -1,6 +1,6 @@
 {
   "name": "vue-routes-builder",
-  "version": "0.8.1",
+  "version": "1.0.0-alpha0",
   "description": "A Vue Routes Builder",
   "main": "dist/routes.js",
   "module": "dist/routes.esm.js",
