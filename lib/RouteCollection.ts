@@ -28,8 +28,8 @@ export class RouteCollection implements IRouteCollection {
     return this._routes.length;
   }
 
-  add(path: string, view?: Component, views?: Dictionary<Component>, config: RouteBuilderConfig = {}): Route {
-    return tap(new Route(path, view, views, config), Array.prototype.push.bind(this._routes));
+  add(path: string, view?: Component, config: RouteBuilderConfig = {}): Route {
+    return tap(new Route(path, view, config), Array.prototype.push.bind(this._routes));
   }
 
   group(config: RouteCollectionConfig, group: RouteCollection | ((routes: RouteCollection) => void)): void {
