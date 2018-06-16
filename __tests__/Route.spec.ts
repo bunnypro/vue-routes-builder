@@ -125,12 +125,22 @@ describe("Route", () => {
   });
 
   test("can add alias route config option with dedicated method", () => {
-    const route = new Route("/home").alias("/about");
+    const route = new Route("/home").options({
+      alias: "/profile",
+    });
 
     expect(route.build()).toEqual({
       path: "/home",
       components: {},
-      alias: ["/about"],
+      alias: "/profile",
+    });
+
+    route.alias("/about");
+
+    expect(route.build()).toEqual({
+      path: "/home",
+      components: {},
+      alias: ["/profile", "/about"],
     });
 
     route.alias("/dashboard");
@@ -138,7 +148,7 @@ describe("Route", () => {
     expect(route.build()).toEqual({
       path: "/home",
       components: {},
-      alias: ["/about", "/dashboard"],
+      alias: ["/profile", "/about", "/dashboard"],
     });
 
     route.alias(["/a", "/b"]);
@@ -146,7 +156,7 @@ describe("Route", () => {
     expect(route.build()).toEqual({
       path: "/home",
       components: {},
-      alias: ["/about", "/dashboard", "/a", "/b"],
+      alias: ["/profile", "/about", "/dashboard", "/a", "/b"],
     });
   });
 

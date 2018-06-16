@@ -73,6 +73,8 @@ export class Route {
   alias(alias: string | string[]) {
     if (!this._config.alias) {
       this._config.alias = [];
+    } else if (!(this._config.alias instanceof Array)) {
+      this._config.alias = [this._config.alias];
     }
 
     if (!(alias instanceof Array)) {
