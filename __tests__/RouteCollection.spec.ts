@@ -28,7 +28,7 @@ describe("RouteCollection", () => {
   test("can add named view route", () => {
     const routes = new RouteCollection();
 
-    routes.add("/home", null, {
+    routes.add("/home").components({
       home: Home,
       about: About,
     });
@@ -47,7 +47,7 @@ describe("RouteCollection", () => {
   test("can add default and named view route", () => {
     const routes = new RouteCollection();
 
-    routes.add("/home", Home, {
+    routes.add("/home", Home).components({
       about: About,
     });
 

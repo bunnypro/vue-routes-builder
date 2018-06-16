@@ -9,9 +9,19 @@ describe("Route", () => {
   const About = { template: "<div>About</div>" };
 
   test("can be instantiated with default value and options", () => {
-    const route = new Route("/", Home, {}, { props: true });
+    const route = new Route("/", Home, { props: true });
 
     expect(route.build()).toEqual({
+      path: "/",
+      components: {
+        default: Home,
+      },
+      props: true,
+    });
+
+    const route2 = new Route("/").component(Home).options({ props: true });
+
+    expect(route2.build()).toEqual({
       path: "/",
       components: {
         default: Home,
@@ -21,7 +31,7 @@ describe("Route", () => {
   });
 
   test("can be instantiated with named views", () => {
-    const route = new Route("/", null, { home: Home, about: About }, { props: true });
+    const route = new Route("/").components({ home: Home, about: About }).options({ props: true });
 
     expect(route.build()).toEqual({
       path: "/",
@@ -34,8 +44,8 @@ describe("Route", () => {
   });
 
   test("can be instantiated with default and named views", () => {
-    const route = new Route("/", Home, { about: About }, { props: true });
-    const route2 = new Route("/", null, { default: Home, about: About }, { props: true });
+    const route = new Route("/", Home, { props: true }).components({ about: About });
+    const route2 = new Route("/").components({ default: Home, about: About }).options({ props: true });
 
     expect(route.build()).toEqual({
       path: "/",
@@ -112,7 +122,7 @@ describe("Route", () => {
 
     route.children(r => {
       r.add("/about", About);
-      r.add("home", null, {
+      r.add("home").components({
         home: Home,
         about: About,
       });
@@ -164,7 +174,7 @@ describe("Route", () => {
   });
 
   test("use user specified beforEnter if exists", () => {
-    const route = new Route("/home", null, null, {
+    const route = new Route("/home").options({
       beforeEnter: function(to, from, next) {
         next("/about");
       },
