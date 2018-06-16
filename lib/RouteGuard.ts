@@ -1,8 +1,8 @@
 import Vue from "vue";
 import { Route, RawLocation } from "vue-router/types/router";
 
-type PossibleRouteGuardResult = RawLocation | boolean | void;
-type AsyncPossibleRouteGuardResult = Promise<PossibleRouteGuardResult>;
+export type PossibleRouteGuardResult = RawLocation | boolean | void;
+export type AsyncPossibleRouteGuardResult = Promise<PossibleRouteGuardResult>;
 
 export type RouteGuardResult = PossibleRouteGuardResult | AsyncPossibleRouteGuardResult;
 
