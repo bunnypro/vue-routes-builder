@@ -64,6 +64,12 @@ export class Route {
     return this;
   }
 
+  redirect(to: RedirectOption) {
+    this._config.redirect = to;
+
+    return this;
+  }
+
   guard(...guards: RouteGuardType[]): Route {
     this._guards.push(...guards);
 

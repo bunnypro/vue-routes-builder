@@ -117,6 +117,13 @@ describe("Route", () => {
     });
   });
 
+  test("can add redirect option with dedicated config", () => {
+    const route = new Route("/home", Home).redirect("/about");
+    const route2 = new Route("/home", Home, { redirect: "/about" });
+
+    expect(route.build()).toEqual(route2.build());
+  });
+
   test("can create children", () => {
     const route = new Route("/home");
 
