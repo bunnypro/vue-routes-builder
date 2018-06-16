@@ -24,7 +24,7 @@ export interface RouteBuilderConfig {
 
 export class Route {
   private readonly _path: string;
-  private readonly _components: Dictionary<Component>;
+  private _components: Dictionary<Component>;
   private readonly _config: RouteBuilderConfig;
   private _children: RouteChildren | RouteChildrenWrapper;
   private readonly _guards: RouteGuardType[] = [];
@@ -35,6 +35,13 @@ export class Route {
       this._components = { default: view };
     }
     this._config = config;
+  }
+
+  components(views?: Dictionary<Component>) {
+    this._components = {
+      ...this._components,
+      ...views,
+    };
   }
 
   guard(...guards: RouteGuardType[]): Route {
