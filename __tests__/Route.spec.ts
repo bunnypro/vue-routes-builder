@@ -160,6 +160,20 @@ describe("Route", () => {
     });
   });
 
+  test("can add meta from dedicated method", () => {
+    const route = new Route("/home").meta({
+      requireAuth: true,
+    });
+
+    expect(route.build()).toEqual({
+      path: "/home",
+      components: {},
+      meta: {
+        requireAuth: true,
+      },
+    });
+  });
+
   test("can create children", () => {
     const route = new Route("/home");
 

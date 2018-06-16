@@ -86,6 +86,12 @@ export class Route {
     return this;
   }
 
+  meta(meta: any) {
+    this._config.meta = meta;
+
+    return this;
+  }
+
   guard(...guards: RouteGuardType[]): Route {
     this._guards.push(...guards);
 
